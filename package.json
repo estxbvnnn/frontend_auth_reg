@@ -1,0 +1,45 @@
+{
+  "name": "ecofood-auth-app",
+  "version": "1.0.0",
+  "description": "A secure authentication system for EcoFood using Firebase and React.",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "keywords": [
+    "react",
+    "firebase",
+    "authentication",
+    "registration"
+  ],
+  "author": "Esteban Ardiles",
+  "license": "MIT",
+  "dependencies": {
+    "firebase": "^9.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3"
+  },
+  "devDependencies": {},
+  "homepage": "http://152.174.92.213:3000",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/yourusername/ecofood-auth-app.git"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

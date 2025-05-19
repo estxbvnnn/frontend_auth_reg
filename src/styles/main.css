@@ -1,0 +1,255 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="address"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    background: #5cb85c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+input[type="submit"]:hover {
+    background: #4cae4c;
+}
+
+.error {
+    color: red;
+    margin: 10px 0;
+}
+
+.success {
+    color: green;
+    margin: 10px 0;
+}
+
+/* Estilo EcoFood para formularios de login y registro */
+.ecofood-form-container {
+    max-width: 400px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(56, 142, 60, 0.10);
+    padding: 32px 24px;
+    text-align: center;
+    border: 2px solid #a5d6a7;
+}
+
+.ecofood-form-container h2 {
+    color: #388e3c;
+    margin-bottom: 24px;
+}
+
+.ecofood-form-container label {
+    display: block;
+    text-align: left;
+    color: #388e3c;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+.ecofood-form-container input[type="text"],
+.ecofood-form-container input[type="email"],
+.ecofood-form-container input[type="password"],
+.ecofood-form-container input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 16px 0;
+    border: 1px solid #a5d6a7;
+    border-radius: 6px;
+    background: #f1f8e9;
+    font-size: 16px;
+}
+
+.ecofood-form-container button,
+.ecofood-form-container input[type="submit"] {
+    background: linear-gradient(90deg, #43a047 0%, #66bb6a 100%);
+    color: white;
+    border: none;
+    padding: 12px 0;
+    width: 100%;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+}
+
+.ecofood-form-container button:hover,
+.ecofood-form-container input[type="submit"]:hover {
+    background: linear-gradient(90deg, #388e3c 0%, #81c784 100%);
+}
+
+.ecofood-form-container .error {
+    color: #d32f2f;
+    background: #ffebee;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.ecofood-form-container .success {
+    color: #388e3c;
+    background: #e8f5e9;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.ecofood-form-container a {
+    color: #388e3c;
+    text-decoration: underline;
+    font-size: 15px;
+}
+
+/* Menú superior */
+.menu-superior {
+    background: #388e3c;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 2px 8px rgba(56, 142, 60, 0.08);
+}
+.menu-superior ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+.menu-superior li {
+    margin: 0 18px;
+}
+.menu-superior .boton-verde {
+    color: #fff;
+    background: #43a047;
+    padding: 10px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.2s;
+    display: inline-block;
+}
+.menu-superior .boton-verde:hover {
+    background: #2e7d32;
+}
+
+/* Hero */
+.hero {
+    background: linear-gradient(135deg, #e8f5e9 0%, #fffde4 100%);
+    padding: 40px 0 30px 0;
+    text-align: center;
+}
+.logo-centro img {
+    width: 120px;
+    margin-bottom: 18px;
+}
+.mensaje-centro {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.texto-negro {
+    color: #222;
+    font-size: 1.15rem;
+    margin-bottom: 10px;
+}
+
+/* Características */
+.caracteristicas {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    padding: 40px 0 20px 0;
+    background: #f1f8e9;
+    flex-wrap: wrap;
+}
+.caracteristica {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(56, 142, 60, 0.07);
+    padding: 24px 20px;
+    max-width: 320px;
+    min-width: 220px;
+    flex: 1 1 220px;
+    margin: 10px;
+}
+.titulo-verde {
+    color: #388e3c;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+/* Impacto Global */
+.impacto-global {
+    background: #e0f2f1;
+    padding: 40px 0;
+}
+.contenido-impacto {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    gap: 40px;
+}
+.texto-impacto {
+    flex: 1 1 350px;
+    min-width: 300px;
+    color: #222;
+}
+.texto-impacto h3 {
+    color: #388e3c;
+    margin-top: 18px;
+    margin-bottom: 6px;
+}
+.imagen-impacto img {
+    width: 260px;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(56, 142, 60, 0.10);
+}
+
+/* Footer */
+footer {
+    background: #388e3c;
+    color: #fff;
+    text-align: center;
+    padding: 18px 0 10px 0;
+    margin-top: 40px;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}

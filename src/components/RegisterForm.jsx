@@ -1,0 +1,113 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../firebase/config';
+
+const RegisterForm = () => {
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [address, setAddress] = useState('');
+    const [commune, setCommune] = useState('');
+    const [phone, setPhone] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        setError('');
+        setSuccess('');
+
+        // Validación robusta: mínimo 6 caracteres, letras y números
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+        if (!passwordRegex.test(password)) {
+            setError('La contraseña debe tener al menos 6 caracteres y combinar letras y números.');
+            return;
+        }
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            await setDoc(doc(db, 'usuarios', user.uid), {
+                fullName,
+                email,
+                address,
+                commune,
+                phone,
+                userType: 'cliente'
+            });
+
+            await sendEmailVerification(user);
+            setSuccess('Registro exitoso. Por favor verifica tu correo electrónico.');
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
+    return (
+        <div className="ecofood-form-container">
+            <form onSubmit={handleRegister}>
+                {error && <p className="error">{error}</p>}
+                {success && (
+                    <div className="success">
+                        {success}
+                        <br />
+                        <Link to="/login" style={{ color: '#388e3c', fontWeight: 'bold' }}>
+                            Ir a iniciar sesión
+                        </Link>
+                    </div>
+                )}
+                {!success && (
+                    <>
+                        <input
+                            type="text"
+                            placeholder="Nombre completo"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="email"
+                            placeholder="Correo electrónico"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="password"
+                            placeholder="Contraseña"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="text"
+                            placeholder="Dirección"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="text"
+                            placeholder="Comuna"
+                            value={commune}
+                            onChange={(e) => setCommune(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="tel"
+                            placeholder="Teléfono (opcional)"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                        />
+                        <button type="submit">Registrar</button>
+                    </>
+                )}
+            </form>
+        </div>
+    );
+};
+
+export default RegisterForm;
