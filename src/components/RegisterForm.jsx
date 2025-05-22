@@ -19,10 +19,9 @@ const RegisterForm = () => {
         setError('');
         setSuccess('');
 
-        // Validación robusta: mínimo 6 caracteres, letras y números
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
         if (!passwordRegex.test(password)) {
-            setError('La contraseña debe tener al menos 6 caracteres y combinar letras y números.');
+            setError('La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y un carácter especial.');
             return;
         }
 
@@ -85,7 +84,7 @@ const RegisterForm = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            minLength={6}
+                            minLength={8}
                             maxLength={30}
                         />
                         <input
