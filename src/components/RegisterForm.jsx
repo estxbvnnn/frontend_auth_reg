@@ -40,9 +40,9 @@ const RegisterForm = () => {
             });
 
             await sendEmailVerification(user);
-            setSuccess('Registro exitoso. Por favor verifica tu correo electrónico.');
+            setSuccess('Registro exitoso. Verifica tu correo.');
         } catch (error) {
-            setError(error.message);
+            setError('No se pudo registrar. Intenta con otro correo.');
         }
     };
 
@@ -67,6 +67,8 @@ const RegisterForm = () => {
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
                             required
+                            minLength={3}
+                            maxLength={50}
                         />
                         <input
                             type="email"
@@ -74,6 +76,8 @@ const RegisterForm = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            minLength={5}
+                            maxLength={50}
                         />
                         <input
                             type="password"
@@ -81,6 +85,8 @@ const RegisterForm = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
+                            minLength={6}
+                            maxLength={30}
                         />
                         <input
                             type="text"
@@ -88,6 +94,8 @@ const RegisterForm = () => {
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
                             required
+                            minLength={5}
+                            maxLength={60}
                         />
                         <input
                             type="text"
@@ -95,17 +103,27 @@ const RegisterForm = () => {
                             value={commune}
                             onChange={(e) => setCommune(e.target.value)}
                             required
+                            minLength={3}
+                            maxLength={30}
                         />
                         <input
                             type="tel"
                             placeholder="Teléfono (opcional)"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
+                            minLength={8}
+                            maxLength={15}
                         />
                         <button type="submit">Registrar</button>
                     </>
                 )}
             </form>
+            <p>
+                ¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link>
+            </p>
+            <p>
+                <Link to="/" style={{ fontWeight: "bold" }}>Ir al inicio</Link>
+            </p>
         </div>
     );
 };

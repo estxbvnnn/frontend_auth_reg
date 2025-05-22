@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { auth } from '../firebase/config';
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
@@ -8,7 +8,7 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [showVerifyMessage, setShowVerifyMessage] = useState(false);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -22,9 +22,9 @@ const LoginForm = () => {
                 setShowVerifyMessage(true);
                 return;
             }
-            history.push('/home');
+            navigate('/home');
         } catch (err) {
-            setError(err.message);
+            setError('Usuario o contraseña incorrectos');
         }
     };
 
@@ -35,8 +35,7 @@ const LoginForm = () => {
                 {error && <p className="error">{error}</p>}
                 {showVerifyMessage && (
                     <div className="success">
-                        <p>Tu correo electrónico ha sido verificado.</p>
-                        <p>Puedes ingresar con tu cuenta.</p>
+                        <p>Verifica tu correo antes de ingresar.</p>
                         <button
                             style={{
                                 background: '#388e3c',
@@ -49,7 +48,7 @@ const LoginForm = () => {
                                 marginTop: '12px'
                             }}
                             type="button"
-                            onClick={() => history.push('/')}
+                            onClick={() => navigate('/')}
                         >
                             Ir al inicio
                         </button>
@@ -64,6 +63,8 @@ const LoginForm = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                minLength={5}
+                                maxLength={50}
                             />
                         </div>
                         <div>
@@ -73,6 +74,8 @@ const LoginForm = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                minLength={6}
+                                maxLength={30}
                             />
                         </div>
                         <button type="submit">Login</button>
@@ -80,10 +83,13 @@ const LoginForm = () => {
                 )}
             </form>
             <p>
-                <a href="/password-reset">¿Olvidaste tu contraseña?</a>
+                <Link to="/password-reset">¿Olvidaste tu contraseña?</Link>
             </p>
             <p>
                 ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
+            </p>
+            <p>
+                <Link to="/" style={{ fontWeight: "bold" }}>Ir al inicio</Link>
             </p>
         </div>
     );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../firebase/AuthContext';
 import { auth, db } from '../firebase/config';
 import { doc, getDoc } from 'firebase/firestore';
@@ -8,7 +8,7 @@ import frutita from '../assets/img/frutita.jpg';
 
 const Home = () => {
     const { currentUser } = useAuth();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [fullName, setFullName] = useState('');
 
     useEffect(() => {
@@ -30,7 +30,7 @@ const Home = () => {
 
     const handleLogout = async () => {
         await auth.signOut();
-        history.push('/');
+        navigate('/Home');
     };
 
     return (

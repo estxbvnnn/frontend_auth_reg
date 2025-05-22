@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -9,13 +9,17 @@ import ProtectedRoute from './components/ProtectedRoute';
 const App = () => {
     return (
         <Router>
-            <Switch>
-                <Route path="/register" component={Register} />
-                <Route path="/login" component={Login} />
-                <Route path="/password-reset" component={PasswordReset} />
-                <ProtectedRoute path="/home" component={Home} />
-                <Route path="/" exact component={Home} /> {/* Cambiado para que Home sea la raíz */}
-            </Switch>
+            <Routes>
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/password-reset" element={<PasswordReset />} />
+                <Route path="/home" element={
+                    <ProtectedRoute>
+                        <Home />
+                    </ProtectedRoute>
+                } />
+                <Route path="/" element={<Home />} />
+            </Routes>
         </Router>
     );
 };

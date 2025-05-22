@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 
 const PasswordResetForm = () => {
@@ -11,17 +12,16 @@ const PasswordResetForm = () => {
         const auth = getAuth();
         try {
             await sendPasswordResetEmail(auth, email);
-            setMessage('Se ha enviado un correo de restablecimiento de contraseña.');
+            setMessage('Correo de restablecimiento enviado.');
             setError('');
         } catch (err) {
-            setError('Error al enviar el correo: ' + err.message);
+            setError('No se pudo enviar el correo.');
             setMessage('');
         }
     };
 
     return (
-        <div>
-            <h2>Restablecer Contraseña</h2>
+        <div className="ecofood-form-container">
             <form onSubmit={handleSubmit}>
                 <input
                     type="email"
@@ -29,11 +29,16 @@ const PasswordResetForm = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    minLength={5}
+                    maxLength={50}
                 />
                 <button type="submit">Enviar correo de restablecimiento</button>
             </form>
-            {message && <p>{message}</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {message && <p className="success">{message}</p>}
+            {error && <p className="error">{error}</p>}
+            <p>
+                <Link to="/login">Volver al login</Link>
+            </p>
         </div>
     );
 };
