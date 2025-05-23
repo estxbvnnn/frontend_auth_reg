@@ -24,7 +24,7 @@ const LoginForm = () => {
             }
             navigate('/home');
         } catch (err) {
-            setError('Usuario o contraseña incorrectos');
+            setError('Usuario o contraseña incorrectos. Si ya te registraste, revisa tu correo y confirma tu cuenta.');
         }
     };
 

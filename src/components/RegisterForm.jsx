@@ -19,9 +19,16 @@ const RegisterForm = () => {
         setError('');
         setSuccess('');
 
+        // Validación de contraseña robusta
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
         if (!passwordRegex.test(password)) {
             setError('La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y un carácter especial.');
+            return;
+        }
+
+        // Validación de teléfono (opcional)
+        if (phone && !/^\d{8,15}$/.test(phone)) {
+            setError('El teléfono debe contener solo números y tener entre 8 y 15 dígitos.');
             return;
         }
 
@@ -109,7 +116,7 @@ const RegisterForm = () => {
                             type="tel"
                             placeholder="Teléfono (opcional)"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
                             minLength={8}
                             maxLength={15}
                         />
