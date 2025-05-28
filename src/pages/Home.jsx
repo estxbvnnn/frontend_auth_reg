@@ -7,7 +7,7 @@ import logo from '../assets/img/Recurso 5.svg';
 import frutita from '../assets/img/frutita.jpg';
 
 const Home = () => {
-    const { currentUser } = useAuth();
+    const { currentUser, userData } = useAuth();
     const navigate = useNavigate();
     const [fullName, setFullName] = useState('');
 
@@ -30,7 +30,7 @@ const Home = () => {
 
     const handleLogout = async () => {
         await auth.signOut();
-        navigate('/Home');
+        navigate('/login');
     };
 
     return (
@@ -52,6 +52,23 @@ const Home = () => {
                             <span style={{ color: '#fff', fontWeight: 'bold' }}>
                                 {fullName || 'Usuario'}
                             </span>
+                            {/* Botón solo para admin */}
+                            {userData && (userData.userType === 'admin' || userData.tipo === 'admin') && (
+                                <button
+                                    onClick={() => navigate('/admin')}
+                                    style={{
+                                        background: '#23272f',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        padding: '8px 16px',
+                                        cursor: 'pointer',
+                                        fontWeight: 'bold'
+                                    }}
+                                >
+                                    Panel Admin
+                                </button>
+                            )}
                             <button
                                 onClick={handleLogout}
                                 style={{
@@ -71,59 +88,57 @@ const Home = () => {
                 </nav>
             </header>
 
-            {/* Contenido principal */}
-            <main>
-                <section className="hero">
-                    <div className="logo-centro">
-                        <img src={logo} alt="Logo EcoFood" />
-                    </div>
-                    <div className="mensaje-centro">
-                        <p className="texto-negro">
-                            Somos una organización comprometida en la reducción del desperdicio alimentario mediante puntos educativos, tecnológicos y prácticos.
+            {/* Hero principal */}
+            <section className="hero">
+                <div className="logo-centro">
+                    <img src={logo} alt="EcoFood Logo" />
+                </div>
+                <div className="mensaje-centro">
+                    <h1 className="titulo-verde">¡Bienvenido a EcoFood!</h1>
+                    <p className="texto-negro">
+                        La plataforma que conecta empresas y clientes para combatir el desperdicio de alimentos y cuidar el planeta.
+                    </p>
+                </div>
+            </section>
+
+            {/* Características */}
+            <section className="caracteristicas">
+                <div className="caracteristica">
+                    <h3 className="titulo-verde">Compra Inteligente</h3>
+                    <p>Accede a productos de calidad a precios reducidos y ayuda a reducir el desperdicio.</p>
+                </div>
+                <div className="caracteristica">
+                    <h3 className="titulo-verde">Empresas Comprometidas</h3>
+                    <p>Las empresas pueden publicar sus excedentes y llegar a más clientes responsables.</p>
+                </div>
+                <div className="caracteristica">
+                    <h3 className="titulo-verde">Impacto Ambiental</h3>
+                    <p>Juntos generamos un impacto positivo en la sociedad y el medio ambiente.</p>
+                </div>
+            </section>
+            {/* Impacto Global */}
+            <section className="impacto-global">
+                <div className="contenido-impacto">
+                    <div className="texto-impacto">
+                        <h3>¿Sabías que...?</h3>
+                        <p>
+                            Cada año se desperdician millones de toneladas de alimentos en el mundo. EcoFood te ayuda a ser parte de la solución.
                         </p>
-                        <p className="texto-negro">
-                            Nuestro propósito es promover la sostenibilidad, empoderando a las personas y comunidades para optimizar el uso de alimentos y minimizar residuos, protegiendo así nuestro planeta.
-                        </p>
+                        <ul>
+                            <li>Reduce tu huella ecológica</li>
+                            <li>Apoya a empresas responsables</li>
+                            <li>Accede a productos frescos y económicos</li>
+                        </ul>
                     </div>
-                </section>
+                    <div className="imagen-impacto">
+                        <img src={frutita} alt="Frutas EcoFood" />
+                    </div>
+                </div>
+            </section>
 
-                {/* Características */}
-                <section className="caracteristicas" id="sobre-nosotros">
-                    <div className="caracteristica">
-                        <h2 className="titulo-verde">Educación</h2>
-                        <p>Materiales educativos gratuitos y talleres comunitarios para fomentar prácticas sostenibles en el consumo de alimentos y reducir el desperdicio.</p>
-                    </div>
-                    <div className="caracteristica">
-                        <h2 className="titulo-verde">Conexión</h2>
-                        <p>Alianzas con productores, comerciantes y consumidores para reducir excedentes y aprovechar al máximo la disponibilidad de alimentos.</p>
-                    </div>
-                    <div className="caracteristica">
-                        <h2 className="titulo-verde">Innovación</h2>
-                        <p>Tecnología para soluciones prácticas, como aplicaciones, webs y redes comunitarias que facilitan la reducción del desperdicio alimentario.</p>
-                    </div>
-                </section>
-
-                {/* Impacto Global */}
-                <section className="impacto-global">
-                    <div className="contenido-impacto">
-                        <div className="texto-impacto">
-                            <h3>El Desperdicio de Alimentos</h3>
-                            <p>El desperdicio de alimentos no solo es un problema económico, sino también ambiental y social. Tiene un impacto negativo significativo en el medio ambiente.</p>
-                            <h3>Impacto Global</h3>
-                            <p>El desperdicio alimentario es un problema global que afecta la sostenibilidad y la seguridad alimentaria en todo el planeta.</p>
-                            <h3>Un Reto que Impacta a Todos</h3>
-                            <p>El desperdicio de alimentos afecta tanto al medio ambiente como a la seguridad alimentaria global, siendo un desafío que debemos abordar juntos.</p>
-                        </div>
-                        <div className="imagen-impacto">
-                            <img src={frutita} alt="Frutita" />
-                        </div>
-                    </div>
-                </section>
-            </main>
-
-            {/* Pie de Página */}
+            {/* Footer */}
             <footer>
-                <p>&copy; 2025 EcoFood. Todos los derechos reservados.</p>
+                <p>EcoFood &copy; 2024 - Todos los derechos reservados</p>
             </footer>
         </div>
     );

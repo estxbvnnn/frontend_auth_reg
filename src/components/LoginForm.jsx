@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { auth } from '../firebase/config';
+import { auth, db } from '../firebase/config';
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 const LoginForm = () => {
     const [email, setEmail] = useState('');
@@ -22,7 +23,21 @@ const LoginForm = () => {
                 setShowVerifyMessage(true);
                 return;
             }
-            navigate('/home');
+            // Obtener datos de Firestore
+            const docRef = doc(db, 'usuarios', userCredential.user.uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const datos = docSnap.data();
+                if (datos.userType === "admin" || datos.tipo === "admin") {
+                    navigate("/admin");
+                } else if (datos.userType === "cliente" || datos.tipo === "cliente") {
+                    navigate("/home");
+                } else {
+                    setError("Tipo de usuario no permitido.");
+                }
+            } else {
+                setError("No se encontraron datos de usuario.");
+            }
         } catch (err) {
             setError('Usuario o contraseña incorrectos. Si ya te registraste, revisa tu correo y confirma tu cuenta.');
         }
