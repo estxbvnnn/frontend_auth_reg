@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
@@ -11,7 +11,6 @@ const AdminRegisterAdmin = () => {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isMain, setIsMain] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
@@ -20,7 +19,6 @@ const AdminRegisterAdmin = () => {
         setError('');
         setSuccess('');
 
-        // Validación de contraseña robusta
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
         if (!passwordRegex.test(password)) {
             setError('La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y un carácter especial.');
@@ -34,7 +32,7 @@ const AdminRegisterAdmin = () => {
             await setDoc(doc(db, 'usuarios', user.uid), {
                 fullName,
                 email,
-                isMain,
+                isMain: false,
                 userType: 'admin'
             });
 
@@ -43,7 +41,6 @@ const AdminRegisterAdmin = () => {
             setFullName('');
             setEmail('');
             setPassword('');
-            setIsMain(false);
             await secondaryAuth.signOut();
         } catch (error) {
             setError('No se pudo registrar. Intenta con otro correo.');
@@ -85,15 +82,7 @@ const AdminRegisterAdmin = () => {
                             minLength={8}
                             maxLength={30}
                         />
-                        <label style={{ display: 'block', margin: '10px 0', textAlign: 'left' }}>
-                            <input
-                                type="checkbox"
-                                checked={isMain}
-                                onChange={e => setIsMain(e.target.checked)}
-                                style={{ marginRight: 8 }}
-                            />
-                            Administrador principal (no se podrá eliminar)
-                        </label>
+                        {/* Checkbox de admin principal eliminado */}
                         <button type="submit">Registrar Administrador</button>
                     </>
                 )}
