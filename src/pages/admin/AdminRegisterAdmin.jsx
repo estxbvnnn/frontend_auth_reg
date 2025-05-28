@@ -82,7 +82,6 @@ const AdminRegisterAdmin = () => {
                             minLength={8}
                             maxLength={30}
                         />
-                        {/* Checkbox de admin principal eliminado */}
                         <button type="submit">Registrar Administrador</button>
                     </>
                 )}

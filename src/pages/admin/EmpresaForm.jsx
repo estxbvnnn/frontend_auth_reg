@@ -21,7 +21,6 @@ const EmpresaForm = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        // Validaciones
         if (!empresa.nombre || !empresa.rut || !empresa.direccion || !empresa.comuna || !empresa.email || !empresa.telefono) {
             setError('Todos los campos son obligatorios');
             return;

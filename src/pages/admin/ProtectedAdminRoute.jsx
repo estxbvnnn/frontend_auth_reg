@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../firebase/AuthContext'; // <-- corregido
+import { useAuth } from '../../firebase/AuthContext';
 
 const ProtectedAdminRoute = ({ children }) => {
     const { currentUser } = useAuth();
