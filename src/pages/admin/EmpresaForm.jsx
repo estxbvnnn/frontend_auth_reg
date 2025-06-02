@@ -34,23 +34,16 @@ const EmpresaForm = () => {
         if (name === 'direccion') newValue = value.slice(0, 80);
         if (name === 'comuna') newValue = value.slice(0, 40);
         if (name === 'email') newValue = value.slice(0, 60);
-        if (name === 'telefono') newValue = value.replace(/\D/g, '').slice(0, 9); // Solo 9 dígitos
+        if (name === 'telefono') newValue = value.replace(/\D/g, '').slice(0, 9); 
         if (name === 'contacto') newValue = value.slice(0, 50);
         if (name === 'rut') {
-            // Solo permite dígitos y un guion, máximo 10 caracteres (8 dígitos, guion, 1 dígito/verificador)
             newValue = value.replace(/[^0-9kK-]/g, '').slice(0, 10);
-            // Solo un guion y no al principio
-            newValue = newValue.replace(/(?!^)-/g, match => (newValue.indexOf('-') === match ? '-' : ''));
-            // Si hay más de un guion, elimina los extras
-            const parts = newValue.split('-');
-            if (parts.length > 2) newValue = parts[0] + '-' + parts[1];
         }
         setEmpresa({ ...empresa, [name]: newValue });
     };
 
     const handleSubmit = async e => {
         e.preventDefault();
-        // Validaciones
         if (
             !empresa.nombre ||
             !empresa.rut ||
@@ -74,8 +67,8 @@ const EmpresaForm = () => {
             scrollToError();
             return;
         }
-        if (!/^\d{7,8}-[kK\d]$/.test(empresa.rut)) {
-            setError('RUT inválido. Ejemplo: 12345678-9');
+        if (!/^\d{7,8}-?[kK\d]$/.test(empresa.rut.replace(/-/g, ''))) {
+            setError('RUT inválido. Ejemplo: 12345678-9 o 123456789');
             scrollToError();
             return;
         }
@@ -89,7 +82,6 @@ const EmpresaForm = () => {
             scrollToError();
             return;
         }
-        // Validación estricta de email (solo uno, formato correcto, sin espacios, comas ni punto y coma)
         const emailTrim = empresa.email.trim();
         if (
             !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailTrim) ||
@@ -102,28 +94,24 @@ const EmpresaForm = () => {
             scrollToError();
             return;
         }
-        // Teléfono chileno: 9 dígitos, empieza con 9
         if (!/^9\d{8}$/.test(empresa.telefono)) {
             setError('Teléfono inválido. Ejemplo válido: 956264642');
             scrollToError();
             return;
         }
 
-        // --- VALIDACIÓN DE UNICIDAD DE EMAIL Y RUT ---
         try {
             let emailExists = false;
             let rutExists = false;
 
-            // Buscar en empresas
             const empresasSnap = await getDocs(collection(db, 'empresas'));
             empresasSnap.forEach(docu => {
-                if (id && docu.id === id) return; // Ignora el actual si está editando
+                if (id && docu.id === id) return;
                 const data = docu.data();
                 if (data.email === emailTrim) emailExists = true;
                 if (data.rut === empresa.rut) rutExists = true;
             });
 
-            // Buscar en usuarios (clientes y admins)
             const usuariosSnap = await getDocs(collection(db, 'usuarios'));
             usuariosSnap.forEach(docu => {
                 const data = docu.data();
@@ -154,7 +142,6 @@ const EmpresaForm = () => {
         }
     };
 
-    // Scroll al error si existe
     const scrollToError = () => {
         if (formRef.current) {
             formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -162,9 +149,9 @@ const EmpresaForm = () => {
     };
 
     return (
-        <div className="ecofood-form-container" style={{ maxWidth: 420, margin: '40px auto' }}>
+        <div className="ecofood-form-container empresa-form-custom">
             <form onSubmit={handleSubmit} ref={formRef}>
-                <h2 style={{ color: '#388e3c', marginBottom: 18 }}>{id ? 'Editar Empresa' : 'Agregar Empresa'}</h2>
+                <h2 className="empresa-form-title">{id ? 'Editar Empresa' : 'Agregar Empresa'}</h2>
                 {error && <p className="error">{error}</p>}
                 <input
                     className="ecofood-input"
@@ -191,7 +178,7 @@ const EmpresaForm = () => {
                     name="rut"
                     value={empresa.rut}
                     onChange={handleChange}
-                    placeholder="RUT (Ej: 12345678-9)"
+                    placeholder="RUT (Ej: 12345678-9 o 123456789)"
                     required
                     maxLength={10}
                 />
@@ -239,11 +226,11 @@ const EmpresaForm = () => {
                     maxLength={9}
                     type="tel"
                 />
-                <button type="submit" style={{ marginTop: 10 }}>{id ? 'Actualizar' : 'Crear'}</button>
+                <button type="submit" className="empresa-form-btn">{id ? 'Actualizar' : 'Crear'}</button>
                 {id && (
                     <Link
                         to={`/admin/empresas/${id}/productos`}
-                        className="admin-btn"
+                        className="admin-btn empresa-form-btn"
                         style={{ display: 'block', marginTop: 16, textAlign: 'center' }}
                     >
                         Ver productos

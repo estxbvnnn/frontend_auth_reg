@@ -60,8 +60,24 @@ const EmpresasList = () => {
                             <td>{emp.email}</td>
                             <td>{emp.telefono}</td>
                             <td>
-                                <Link to={`/admin/empresas/editar/${emp.id}`} className="admin-btn">Editar</Link>
-                                <button className="admin-btn admin-btn-danger" onClick={() => handleDelete(emp.id)}>Eliminar</button>
+                                <div style={{ display: 'flex', gap: 6 }}>
+                                    <Link to={`/admin/empresas/editar/${emp.id}`} className="admin-btn">
+                                        Editar
+                                    </Link>
+                                    <Link
+                                        to={`/admin/empresas/${emp.id}/productos`}
+                                        className="admin-btn"
+                                        style={{ background: '#1976d2' }}
+                                    >
+                                        Ver productos
+                                    </Link>
+                                    <button
+                                        className="admin-btn admin-btn-danger"
+                                        onClick={() => handleDelete(emp.id)}
+                                    >
+                                        Eliminar
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     ))}
