@@ -62,7 +62,7 @@ const AdminRegisterClient = () => {
 
     return (
         <div className="ecofood-form-container">
-            <h2>Registrar Cliente (Admin)</h2>
+            <h2>Registrar Cliente</h2>
             <form onSubmit={handleRegister}>
                 {error && <p className="error">{error}</p>}
                 {success && <div className="success">{success}</div>}

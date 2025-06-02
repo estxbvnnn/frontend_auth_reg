@@ -10,8 +10,10 @@ const Home = () => {
     const { currentUser, userData } = useAuth();
     const navigate = useNavigate();
     const [fullName, setFullName] = useState('');
+    const [fade, setFade] = useState(false);
 
     useEffect(() => {
+        setFade(true);
         const fetchName = async () => {
             if (currentUser) {
                 const docRef = doc(db, 'usuarios', currentUser.uid);
@@ -37,8 +39,8 @@ const Home = () => {
         <div>
             {/* Menú superior */}
             <header>
-                <nav className="menu-superior" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <ul style={{ display: 'flex', margin: 0, padding: 0 }}>
+                <nav className="menu-superior flex-nav">
+                    <ul className="nav-list">
                         <li><Link to="/home" className="boton-verde">Inicio</Link></li>
                         {!currentUser && (
                             <>
@@ -48,38 +50,22 @@ const Home = () => {
                         )}
                     </ul>
                     {currentUser && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginRight: '24px' }}>
-                            <span style={{ color: '#fff', fontWeight: 'bold' }}>
+                        <div className="nav-user">
+                            <span className="nav-username">
+                                <span role="img" aria-label="user" className="nav-usericon">👤</span>
                                 {fullName || 'Usuario'}
                             </span>
-                            {/* Botón solo para admin */}
                             {userData && (userData.userType === 'admin' || userData.tipo === 'admin') && (
                                 <button
                                     onClick={() => navigate('/admin')}
-                                    style={{
-                                        background: '#23272f',
-                                        color: '#fff',
-                                        border: 'none',
-                                        borderRadius: '6px',
-                                        padding: '8px 16px',
-                                        cursor: 'pointer',
-                                        fontWeight: 'bold'
-                                    }}
+                                    className="admin-panel-btn"
                                 >
                                     Panel Admin
                                 </button>
                             )}
                             <button
                                 onClick={handleLogout}
-                                style={{
-                                    background: '#d32f2f',
-                                    color: '#fff',
-                                    border: 'none',
-                                    borderRadius: '6px',
-                                    padding: '8px 16px',
-                                    cursor: 'pointer',
-                                    fontWeight: 'bold'
-                                }}
+                                className="logout-btn"
                             >
                                 Cerrar sesión
                             </button>
@@ -89,35 +75,46 @@ const Home = () => {
             </header>
 
             {/* Hero principal */}
-            <section className="hero">
+            <section className={`hero fade-in-section${fade ? ' is-visible' : ''}`}>
                 <div className="logo-centro">
-                    <img src={logo} alt="EcoFood Logo" />
+                    <img src={logo} alt="EcoFood Logo" className="logo-animado" />
                 </div>
                 <div className="mensaje-centro">
-                    <h1 className="titulo-verde">¡Bienvenido a EcoFood!</h1>
-                    <p className="texto-negro">
+                    <h1 className="titulo-verde hero-title">
+                        ¡Bienvenido a EcoFood!
+                    </h1>
+                    <p className="texto-negro hero-desc">
                         La plataforma que conecta empresas y clientes para combatir el desperdicio de alimentos y cuidar el planeta.
                     </p>
+                    {currentUser && (
+                        <div className="saludo-animado saludo-ecofood">
+                            ¡Hola, {fullName || 'usuario'}!
+                        </div>
+                    )}
                 </div>
             </section>
 
             {/* Características */}
-            <section className="caracteristicas">
-                <div className="caracteristica">
+            <section className={`caracteristicas fade-in-section${fade ? ' is-visible' : ''}`}>
+                <div className="caracteristica card-animada">
+                    <div className="caracteristica-icon">🛒</div>
                     <h3 className="titulo-verde">Compra Inteligente</h3>
                     <p>Accede a productos de calidad a precios reducidos y ayuda a reducir el desperdicio.</p>
                 </div>
-                <div className="caracteristica">
+                <div className="caracteristica card-animada">
+                    <div className="caracteristica-icon">🏢</div>
                     <h3 className="titulo-verde">Empresas Comprometidas</h3>
                     <p>Las empresas pueden publicar sus excedentes y llegar a más clientes responsables.</p>
                 </div>
-                <div className="caracteristica">
+                <div className="caracteristica card-animada">
+                    <div className="caracteristica-icon">🌎</div>
                     <h3 className="titulo-verde">Impacto Ambiental</h3>
                     <p>Juntos generamos un impacto positivo en la sociedad y el medio ambiente.</p>
                 </div>
             </section>
+
             {/* Impacto Global */}
-            <section className="impacto-global">
+            <section className={`impacto-global fade-in-section${fade ? ' is-visible' : ''}`}>
                 <div className="contenido-impacto">
                     <div className="texto-impacto">
                         <h3>¿Sabías que...?</h3>
@@ -131,14 +128,14 @@ const Home = () => {
                         </ul>
                     </div>
                     <div className="imagen-impacto">
-                        <img src={frutita} alt="Frutas EcoFood" />
+                        <img src={frutita} alt="Frutas EcoFood" className="impacto-img-animada" />
                     </div>
                 </div>
             </section>
 
             {/* Footer */}
-            <footer>
-                <p>EcoFood &copy; 2024 - Todos los derechos reservados</p>
+            <footer className="ecofood-footer">
+                <p>EcoFood &copy; 2025 - Todos los derechos reservados</p>
             </footer>
         </div>
     );
