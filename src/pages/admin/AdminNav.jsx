@@ -9,68 +9,48 @@ const AdminNav = () => {
         navigate('/login');
     };
     return (
-        <nav style={{
-            background: '#23272f',
-            padding: '0 32px',
-            display: 'flex',
-            alignItems: 'center',
-            height: '60px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
-        }}>
-            <div style={{ fontWeight: 'bold', color: '#fff', fontSize: 22, letterSpacing: 1, marginRight: 40 }}>
-                EcoFood Admin
+        <nav className="admin-nav-bar">
+            <div className="admin-nav-logo">
+                <i className="bi bi-shield-lock-fill"></i> EcoFood Admin
             </div>
-            <div style={{ flex: 1 }}>
-                <Link to="/admin" style={navLinkStyle}>Dashboard</Link>
-                <Link to="/admin/empresas" style={navLinkStyle}>Empresas</Link>
-                <Link to="/admin/clientes" style={navLinkStyle}>Clientes</Link>
-                <Link to="/admin/administradores" style={navLinkStyle}>Administradores</Link>
-                <button
-                    onClick={() => navigate('/home')}
-                    style={{
-                        background: '#388e3c',
-                        color: '#fff',
-                        border: 'none',
-                        borderRadius: 6,
-                        padding: '8px 18px',
-                        fontWeight: 'bold',
-                        fontSize: 16,
-                        cursor: 'pointer',
-                        marginLeft: 16
-                    }}
-                >
-                    Ir al Inicio
-                </button>
-            </div>
+            <ul className="admin-nav-links">
+                <li>
+                    <Link to="/admin" className="admin-nav-link">
+                        <i className="bi bi-speedometer2"></i> Dashboard
+                    </Link>
+                </li>
+                <li>
+                    <Link to="/admin/empresas" className="admin-nav-link">
+                        <i className="bi bi-building"></i> Empresas
+                    </Link>
+                </li>
+                <li>
+                    <Link to="/admin/clientes" className="admin-nav-link">
+                        <i className="bi bi-people"></i> Clientes
+                    </Link>
+                </li>
+                <li>
+                    <Link to="/admin/administradores" className="admin-nav-link">
+                        <i className="bi bi-person-badge"></i> Administradores
+                    </Link>
+                </li>
+                <li>
+                    <button
+                        onClick={() => navigate('/home')}
+                        className="admin-nav-btn admin-nav-btn-green"
+                    >
+                        <i className="bi bi-house-door"></i> Ir al Inicio
+                    </button>
+                </li>
+            </ul>
             <button
                 onClick={handleLogout}
-                style={{
-                    background: '#d32f2f',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: 6,
-                    padding: '8px 20px',
-                    fontWeight: 'bold',
-                    fontSize: 16,
-                    cursor: 'pointer',
-                    marginLeft: 16
-                }}
+                className="admin-nav-btn admin-nav-btn-red"
             >
-                Cerrar sesión
+                <i className="bi bi-box-arrow-right"></i> Cerrar sesión
             </button>
         </nav>
     );
-};
-
-const navLinkStyle = {
-    color: '#fff',
-    textDecoration: 'none',
-    marginRight: 28,
-    fontSize: 17,
-    fontWeight: 500,
-    padding: '8px 0',
-    borderBottom: '2px solid transparent',
-    transition: 'border 0.2s',
 };
 
 export default AdminNav;

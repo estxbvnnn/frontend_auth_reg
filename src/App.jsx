@@ -7,7 +7,6 @@ import PasswordReset from './pages/PasswordReset';
 import ProtectedRoute from './components/ProtectedRoute';
 import ProtectedByRole from './components/ProtectedByRole';
 
-// Importa los componentes del módulo admin
 import AdminNav from './pages/admin/AdminNav';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import EmpresasList from './pages/admin/EmpresasList';
@@ -72,6 +71,12 @@ const App = () => {
                         <AdminsList />
                     </ProtectedByRole>
                 } />
+                <Route path="/admin/clientes/editar/:id" element={
+                    <ProtectedByRole allowed={["admin"]}>
+                        <AdminNav />
+                        <AdminRegisterClient />
+                        </ProtectedByRole>
+                    } />
                 <Route path="/admin/administradores/nuevo" element={
                     <ProtectedByRole allowed={["admin"]}>
                         <AdminNav />

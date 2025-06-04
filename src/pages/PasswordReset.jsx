@@ -4,7 +4,7 @@ import PasswordResetForm from '../components/PasswordResetForm';
 const PasswordReset = () => {
     return (
         <div className="password-reset">
-            <h2>Restablecer Contraseña</h2>
+            <h2></h2>
             <PasswordResetForm />
         </div>
     );

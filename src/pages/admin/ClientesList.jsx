@@ -87,13 +87,22 @@ const ClientesList = () => {
                         <div style={{ color: '#23272f', marginBottom: 14 }}>
                             <b>Teléfono:</b> <span style={{ color: '#555' }}>{cli.phone || '-'}</span>
                         </div>
-                        <button
-                            className="admin-btn admin-btn-danger"
-                            style={{ width: '100%', marginTop: 10 }}
-                            onClick={() => handleDelete(cli.id)}
-                        >
-                            Eliminar
-                        </button>
+                        <div style={{ display: 'flex', gap: 8, width: '100%' }}>
+                            <Link
+                                to={`/admin/clientes/editar/${cli.id}`}
+                                className="admin-btn"
+                                style={{ flex: 1, textAlign: 'center' }}
+                            >
+                                Editar
+                            </Link>
+                            <button
+                                className="admin-btn admin-btn-danger"
+                                style={{ flex: 1 }}
+                                onClick={() => handleDelete(cli.id)}
+                            >
+                                Eliminar
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>
