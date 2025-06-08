@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../../firebase/config';
 import { collection, getDocs, deleteDoc, doc, query, where } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 const AdminsList = () => {
     const [admins, setAdmins] = useState([]);
@@ -17,12 +19,23 @@ const AdminsList = () => {
 
     const handleDelete = async (admin) => {
         if (admin.isMain) {
-            alert('No se puede eliminar el administrador principal.');
+            Swal.fire('No permitido', 'No se puede eliminar el administrador principal.', 'error');
             return;
         }
-        if (window.confirm('¿Seguro que deseas eliminar este administrador?')) {
+        const result = await Swal.fire({
+            title: '¿Seguro que deseas eliminar este administrador?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#43a047',
+            cancelButtonColor: '#d32f2f',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+        if (result.isConfirmed) {
             await deleteDoc(doc(db, 'usuarios', admin.id));
             setAdmins(admins.filter(a => a.id !== admin.id));
+            Swal.fire('Eliminado', 'El administrador ha sido eliminado.', 'success');
         }
     };
 

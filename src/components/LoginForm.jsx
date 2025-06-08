@@ -23,7 +23,6 @@ const LoginForm = () => {
                 setShowVerifyMessage(true);
                 return;
             }
-            // Obtener datos de Firestore
             const docRef = doc(db, 'usuarios', userCredential.user.uid);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
@@ -44,10 +43,10 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="ecofood-form-container">
+        <div className="ecofood-form-container empresa-form-custom">
             <form onSubmit={handleLogin}>
-                <h2 className="ecofood-login-title">Login</h2>
-                {error && <p className="error">{error}</p>}
+                <h2 className="empresa-form-title">Login</h2>
+                {error && <div className="error">{error}</div>}
                 {showVerifyMessage && (
                     <div className="success">
                         <p>Verifica tu correo antes de ingresar.</p>
@@ -71,41 +70,55 @@ const LoginForm = () => {
                 )}
                 {!showVerifyMessage && (
                     <>
-                        <div>
-                            <label>Email:</label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                                minLength={5}
-                                maxLength={50}
-                            />
+                        <div className="mb-3">
+                            <label className="form-label fw-bold text-success">Correo electrónico</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-light">
+                                    <i className="bi bi-envelope-fill text-success"></i>
+                                </span>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                    minLength={5}
+                                    maxLength={50}
+                                    placeholder="Correo electrónico"
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <label>Password:</label>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                minLength={6}
-                                maxLength={30}
-                            />
+                        <div className="mb-3">
+                            <label className="form-label fw-bold text-success">Contraseña</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-light">
+                                    <i className="bi bi-lock-fill text-success"></i>
+                                </span>
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    minLength={6}
+                                    maxLength={30}
+                                    placeholder="Contraseña"
+                                />
+                            </div>
                         </div>
-                        <button type="submit">Login</button>
+                        <button type="submit" className="empresa-form-btn">
+                            <i className="bi bi-box-arrow-in-right me-2"></i>Login
+                        </button>
                     </>
                 )}
             </form>
-            <p>
-                <Link to="/password-reset">¿Olvidaste tu contraseña?</Link>
-            </p>
-            <p>
-                ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
-            </p>
-            <p>
-                <Link to="/" style={{ fontWeight: "bold" }}>Ir al inicio</Link>
-            </p>
+            <div style={{ marginTop: 16 }}>
+                <Link to="/password-reset"><i className="bi bi-question-circle me-1"></i>¿Olvidaste tu contraseña?</Link>
+                <br />
+                ¿No tienes cuenta? <Link to="/register"><i className="bi bi-person-plus-fill me-1"></i>Regístrate</Link>
+                <br />
+                <Link to="/" style={{ fontWeight: "bold" }}><i className="bi bi-house-door-fill me-1"></i>Ir al inicio</Link>
+            </div>
         </div>
     );
 };

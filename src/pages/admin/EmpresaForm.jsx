@@ -40,6 +40,7 @@ const EmpresaForm = () => {
         contacto: '',
         productos: []
     });
+    const [error, setError] = useState('');
     const navigate = useNavigate();
     const { id } = useParams();
     const formRef = useRef(null);
@@ -58,7 +59,7 @@ const EmpresaForm = () => {
         if (name === 'nombre') newValue = value.slice(0, 60);
         if (name === 'direccion') newValue = value.slice(0, 80);
         if (name === 'email') newValue = value.slice(0, 60);
-        if (name === 'telefono') newValue = value.replace(/\D/g, '').slice(0, 9); 
+        if (name === 'telefono') newValue = value.replace(/\D/g, '').slice(0, 9);
         if (name === 'contacto') newValue = value.slice(0, 50);
         if (name === 'rut') newValue = value.replace(/[^0-9kK-]/g, '').slice(0, 10);
         if (name === 'region') {
@@ -145,6 +146,7 @@ const EmpresaForm = () => {
             >
                 <form onSubmit={handleSubmit} ref={formRef}>
                     <h2 className="empresa-form-title mb-4">{id ? 'Editar Empresa' : 'Registrar Nueva Empresa'}</h2>
+                    {error && <div className="ecofood-form-container error">{error}</div>}
                     <div className="row g-3">
                         <div className="col-md-6">
                             <label className="form-label fw-bold text-success">Nombre de la empresa</label>
@@ -153,7 +155,7 @@ const EmpresaForm = () => {
                                     <i className="bi bi-building"></i>
                                 </span>
                                 <input
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     name="nombre"
                                     value={empresa.nombre}
                                     onChange={handleChange}
@@ -171,7 +173,7 @@ const EmpresaForm = () => {
                                     <i className="bi bi-person"></i>
                                 </span>
                                 <input
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     name="contacto"
                                     value={empresa.contacto}
                                     onChange={handleChange}
@@ -189,7 +191,7 @@ const EmpresaForm = () => {
                                     <i className="bi bi-credit-card-2-front"></i>
                                 </span>
                                 <input
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     name="rut"
                                     value={empresa.rut}
                                     onChange={handleChange}
@@ -206,7 +208,7 @@ const EmpresaForm = () => {
                                     <i className="bi bi-geo-alt"></i>
                                 </span>
                                 <input
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     name="direccion"
                                     value={empresa.direccion}
                                     onChange={handleChange}
@@ -224,7 +226,7 @@ const EmpresaForm = () => {
                                     <i className="bi bi-globe"></i>
                                 </span>
                                 <select
-                                    className="form-select"
+                                    className="form-select bg-white"
                                     name="region"
                                     value={empresa.region}
                                     onChange={handleChange}
@@ -244,7 +246,7 @@ const EmpresaForm = () => {
                                     <i className="bi bi-geo"></i>
                                 </span>
                                 <select
-                                    className="form-select"
+                                    className="form-select bg-white"
                                     name="comuna"
                                     value={empresa.comuna}
                                     onChange={handleChange}
@@ -258,7 +260,6 @@ const EmpresaForm = () => {
                                 </select>
                             </div>
                         </div>
-                        {/* Agrupamos correo y teléfono en una fila para que se vean igual que los demás */}
                         <div className="col-md-6">
                             <label className="form-label fw-bold text-success">Correo electrónico</label>
                             <div className="input-group">
@@ -266,7 +267,7 @@ const EmpresaForm = () => {
                                     <i className="bi bi-envelope"></i>
                                 </span>
                                 <input
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     name="email"
                                     value={empresa.email}
                                     onChange={handleChange}
@@ -287,7 +288,7 @@ const EmpresaForm = () => {
                                     <i className="bi bi-telephone"></i>
                                 </span>
                                 <input
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     name="telefono"
                                     value={empresa.telefono}
                                     onChange={handleChange}

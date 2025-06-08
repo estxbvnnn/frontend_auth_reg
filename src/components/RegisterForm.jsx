@@ -19,14 +19,11 @@ const RegisterForm = () => {
         setError('');
         setSuccess('');
 
-        // Validación de contraseña robusta
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
         if (!passwordRegex.test(password)) {
             setError('La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y un carácter especial.');
             return;
         }
-
-        // Validación de teléfono (opcional)
         if (phone && !/^\d{8,15}$/.test(phone)) {
             setError('El teléfono debe contener solo números y tener entre 8 y 15 dígitos.');
             return;
@@ -53,83 +50,139 @@ const RegisterForm = () => {
     };
 
     return (
-        <div className="ecofood-form-container">
+        <div className="ecofood-form-container empresa-form-custom">
             <form onSubmit={handleRegister}>
-                {error && <p className="error">{error}</p>}
+                <h2 className="empresa-form-title">Registro</h2>
+                {error && <div className="error">{error}</div>}
                 {success && (
                     <div className="success">
                         {success}
                         <br />
                         <Link to="/login" style={{ color: '#388e3c', fontWeight: 'bold' }}>
-                            Ir a iniciar sesión
+                            <i className="bi bi-box-arrow-in-right me-1"></i>Ir a iniciar sesión
                         </Link>
                     </div>
                 )}
                 {!success && (
                     <>
-                        <input
-                            type="text"
-                            placeholder="Nombre completo"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                            required
-                            minLength={3}
-                            maxLength={50}
-                        />
-                        <input
-                            type="email"
-                            placeholder="Correo electrónico"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            minLength={5}
-                            maxLength={50}
-                        />
-                        <input
-                            type="password"
-                            placeholder="Contraseña"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            minLength={8}
-                            maxLength={30}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Dirección"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                            required
-                            minLength={5}
-                            maxLength={60}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Comuna"
-                            value={commune}
-                            onChange={(e) => setCommune(e.target.value)}
-                            required
-                            minLength={3}
-                            maxLength={30}
-                        />
-                        <input
-                            type="tel"
-                            placeholder="Teléfono (opcional)"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-                            minLength={8}
-                            maxLength={15}
-                        />
-                        <button type="submit">Registrar</button>
+                        <div className="mb-3">
+                            <label className="form-label fw-bold text-success">Nombre completo</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-light">
+                                    <i className="bi bi-person-fill text-success"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={fullName}
+                                    onChange={(e) => setFullName(e.target.value)}
+                                    required
+                                    minLength={3}
+                                    maxLength={50}
+                                    placeholder="Nombre completo"
+                                />
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label fw-bold text-success">Correo electrónico</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-light">
+                                    <i className="bi bi-envelope-fill text-success"></i>
+                                </span>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                    minLength={5}
+                                    maxLength={50}
+                                    placeholder="Correo electrónico"
+                                />
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label fw-bold text-success">Contraseña</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-light">
+                                    <i className="bi bi-lock-fill text-success"></i>
+                                </span>
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    minLength={8}
+                                    maxLength={30}
+                                    placeholder="Contraseña"
+                                />
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label fw-bold text-success">Dirección</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-light">
+                                    <i className="bi bi-geo-alt-fill text-success"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    required
+                                    minLength={5}
+                                    maxLength={60}
+                                    placeholder="Dirección"
+                                />
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label fw-bold text-success">Comuna</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-light">
+                                    <i className="bi bi-geo-fill text-success"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={commune}
+                                    onChange={(e) => setCommune(e.target.value)}
+                                    required
+                                    minLength={3}
+                                    maxLength={30}
+                                    placeholder="Comuna"
+                                />
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label fw-bold text-success">Teléfono (opcional)</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-light">
+                                    <i className="bi bi-telephone-fill text-success"></i>
+                                </span>
+                                <input
+                                    type="tel"
+                                    className="form-control"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+                                    minLength={8}
+                                    maxLength={15}
+                                    placeholder="Teléfono"
+                                />
+                            </div>
+                        </div>
+                        <button type="submit" className="empresa-form-btn">
+                            <i className="bi bi-person-plus-fill me-2"></i>Registrar
+                        </button>
                     </>
                 )}
             </form>
-            <p>
-                ¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link>
-            </p>
-            <p>
-                <Link to="/" style={{ fontWeight: "bold" }}>Ir al inicio</Link>
-            </p>
+            <div style={{ marginTop: 16 }}>
+                ¿Ya tienes cuenta? <Link to="/login"><i className="bi bi-box-arrow-in-right me-1"></i>Inicia sesión</Link>
+                <br />
+                <Link to="/" style={{ fontWeight: "bold" }}><i className="bi bi-house-door-fill me-1"></i>Ir al inicio</Link>
+            </div>
         </div>
     );
 };

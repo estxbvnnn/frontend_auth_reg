@@ -137,105 +137,142 @@ const AdminRegisterClient = () => {
     };
 
     return (
-        <div className="ecofood-form-container" style={{ maxWidth: 500, margin: "40px auto" }}>
-            <h2 className="empresa-form-title mb-4">{editMode ? 'Editar Usuario' : 'Registrar Usuario'}</h2>
-            <form onSubmit={handleSubmit}>
-                {error && <div className="ecofood-form-container error">{error}</div>}
-                <div className="mb-3">
-                    <label className="form-label fw-bold text-success">Nombre completo</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={fullName}
-                        onChange={e => setFullName(e.target.value)}
-                        required
-                        minLength={3}
-                        maxLength={50}
-                        placeholder="Nombre completo"
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label fw-bold text-success">Correo electrónico</label>
-                    <input
-                        type="email"
-                        className="form-control"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        required
-                        minLength={5}
-                        maxLength={50}
-                        placeholder="Correo electrónico"
-                        disabled={editMode}
-                    />
-                </div>
-                {!editMode && (
-                    <div className="mb-3">
-                        <label className="form-label fw-bold text-success">Contraseña</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                            required
-                            minLength={8}
-                            maxLength={30}
-                            placeholder="Contraseña"
-                        />
+        <div className="container mt-5 mb-5">
+            <div className="ecofood-form-container empresa-form-custom shadow-lg p-4 bg-white rounded" style={{ maxWidth: 600, margin: "40px auto" }}>
+                <h2 className="empresa-form-title mb-4">{editMode ? 'Editar Usuario' : 'Registrar Usuario'}</h2>
+                <form onSubmit={handleSubmit}>
+                    {error && <div className="ecofood-form-container error">{error}</div>}
+                    <div className="row g-3">
+                        <div className="col-md-6">
+                            <label className="form-label fw-bold text-success">Nombre completo</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-success text-white">
+                                    <i className="bi bi-person-fill"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control bg-white"
+                                    value={fullName}
+                                    onChange={e => setFullName(e.target.value)}
+                                    required
+                                    minLength={3}
+                                    maxLength={50}
+                                    placeholder="Nombre completo"
+                                />
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <label className="form-label fw-bold text-success">Correo electrónico</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-success text-white">
+                                    <i className="bi bi-envelope-fill"></i>
+                                </span>
+                                <input
+                                    type="email"
+                                    className="form-control bg-white"
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+                                    required
+                                    minLength={5}
+                                    maxLength={50}
+                                    placeholder="Correo electrónico"
+                                    disabled={editMode}
+                                />
+                            </div>
+                        </div>
+                        {!editMode && (
+                            <div className="col-md-6">
+                                <label className="form-label fw-bold text-success">Contraseña</label>
+                                <div className="input-group">
+                                    <span className="input-group-text bg-success text-white">
+                                        <i className="bi bi-lock-fill"></i>
+                                    </span>
+                                    <input
+                                        type="password"
+                                        className="form-control bg-white"
+                                        value={password}
+                                        onChange={e => setPassword(e.target.value)}
+                                        required
+                                        minLength={8}
+                                        maxLength={30}
+                                        placeholder="Contraseña"
+                                    />
+                                </div>
+                            </div>
+                        )}
+                        <div className="col-md-6">
+                            <label className="form-label fw-bold text-success">Dirección</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-success text-white">
+                                    <i className="bi bi-geo-alt-fill"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control bg-white"
+                                    value={address}
+                                    onChange={e => setAddress(e.target.value)}
+                                    required
+                                    minLength={5}
+                                    maxLength={60}
+                                    placeholder="Dirección"
+                                />
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <label className="form-label fw-bold text-success">Comuna</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-success text-white">
+                                    <i className="bi bi-geo-fill"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control bg-white"
+                                    value={commune}
+                                    onChange={e => setCommune(e.target.value)}
+                                    required
+                                    minLength={3}
+                                    maxLength={30}
+                                    placeholder="Comuna"
+                                />
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <label className="form-label fw-bold text-success">Teléfono (opcional)</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-success text-white">
+                                    <i className="bi bi-telephone-fill"></i>
+                                </span>
+                                <input
+                                    type="tel"
+                                    className="form-control bg-white"
+                                    value={phone}
+                                    onChange={e => setPhone(e.target.value.replace(/\D/g, ""))}
+                                    minLength={8}
+                                    maxLength={15}
+                                    placeholder="Teléfono"
+                                />
+                            </div>
+                        </div>
                     </div>
-                )}
-                <div className="mb-3">
-                    <label className="form-label fw-bold text-success">Dirección</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={address}
-                        onChange={e => setAddress(e.target.value)}
-                        required
-                        minLength={5}
-                        maxLength={60}
-                        placeholder="Dirección"
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label fw-bold text-success">Comuna</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={commune}
-                        onChange={e => setCommune(e.target.value)}
-                        required
-                        minLength={3}
-                        maxLength={30}
-                        placeholder="Comuna"
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label fw-bold text-success">Teléfono (opcional)</label>
-                    <input
-                        type="tel"
-                        className="form-control"
-                        value={phone}
-                        onChange={e => setPhone(e.target.value.replace(/\D/g, ""))}
-                        minLength={8}
-                        maxLength={15}
-                        placeholder="Teléfono"
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className="btn btn-success empresa-form-btn w-100"
-                    disabled={loading}
-                >
-                    {loading ? (
-                        <span>
-                            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                            Guardando...
-                        </span>
-                    ) : (
-                        editMode ? 'Actualizar' : 'Registrar'
-                    )}
-                </button>
-            </form>
+                    <button
+                        type="submit"
+                        className="btn btn-success empresa-form-btn w-100 mt-4"
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <span>
+                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                Guardando...
+                            </span>
+                        ) : (
+                            <>
+                                <i className="bi bi-person-plus-fill me-2"></i>
+                                {editMode ? 'Actualizar' : 'Registrar'}
+                            </>
+                        )}
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

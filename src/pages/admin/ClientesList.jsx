@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../../firebase/config';
 import { collection, getDocs, deleteDoc, doc, query, where } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 const ClientesList = () => {
     const [clientes, setClientes] = useState([]);
@@ -17,9 +19,20 @@ const ClientesList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (window.confirm('¿Seguro que deseas eliminar este cliente?')) {
+        const result = await Swal.fire({
+            title: '¿Seguro que deseas eliminar este cliente?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#43a047',
+            cancelButtonColor: '#d32f2f',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+        if (result.isConfirmed) {
             await deleteDoc(doc(db, 'usuarios', id));
             setClientes(clientes.filter(c => c.id !== id));
+            Swal.fire('Eliminado', 'El cliente ha sido eliminado.', 'success');
         }
     };
 

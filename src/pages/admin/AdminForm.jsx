@@ -21,7 +21,6 @@ const AdminForm = () => {
     }, [id]);
 
     const handleChange = e => setAdmin({ ...admin, [e.target.name]: e.target.value });
-
     const handleCheckbox = e => setAdmin({ ...admin, isMain: e.target.checked });
 
     const handleSubmit = async e => {
@@ -71,54 +70,67 @@ const AdminForm = () => {
 
     return (
         <div className="container mt-5 mb-5">
-            <div className="ecofood-form-container shadow-lg p-4 bg-white rounded" style={{ maxWidth: 500, margin: "40px auto" }}>
+            <div className="ecofood-form-container empresa-form-custom shadow-lg p-4 bg-white rounded" style={{ maxWidth: 600, margin: "40px auto" }}>
                 <h2 className="empresa-form-title mb-4">{id ? 'Editar Administrador' : 'Registrar Administrador'}</h2>
                 <form onSubmit={handleSubmit}>
                     {error && <div className="ecofood-form-container error">{error}</div>}
-                    <div className="mb-3">
-                        <label className="form-label fw-bold text-success">Nombre completo</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="fullName"
-                            value={admin.fullName}
-                            onChange={handleChange}
-                            required
-                            minLength={3}
-                            maxLength={50}
-                            placeholder="Nombre completo"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label fw-bold text-success">Correo electrónico</label>
-                        <input
-                            type="email"
-                            className="form-control"
-                            name="email"
-                            value={admin.email}
-                            onChange={handleChange}
-                            required
-                            minLength={5}
-                            maxLength={50}
-                            placeholder="Correo electrónico"
-                        />
-                    </div>
-                    <div className="form-check mb-3">
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="isMain"
-                            checked={admin.isMain}
-                            onChange={handleCheckbox}
-                            disabled={!!id}
-                        />
-                        <label className="form-check-label" htmlFor="isMain">
-                            Administrador principal
-                        </label>
+                    <div className="row g-3">
+                        <div className="col-md-6">
+                            <label className="form-label fw-bold text-success">Nombre completo</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-success text-white">
+                                    <i className="bi bi-person-fill"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control bg-white"
+                                    name="fullName"
+                                    value={admin.fullName}
+                                    onChange={handleChange}
+                                    required
+                                    minLength={3}
+                                    maxLength={50}
+                                    placeholder="Nombre completo"
+                                />
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <label className="form-label fw-bold text-success">Correo electrónico</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-success text-white">
+                                    <i className="bi bi-envelope-fill"></i>
+                                </span>
+                                <input
+                                    type="email"
+                                    className="form-control bg-white"
+                                    name="email"
+                                    value={admin.email}
+                                    onChange={handleChange}
+                                    required
+                                    minLength={5}
+                                    maxLength={50}
+                                    placeholder="Correo electrónico"
+                                    disabled={!!id}
+                                />
+                            </div>
+                        </div>
+                        <div className="col-md-6 d-flex align-items-center">
+                            <input
+                                className="form-check-input me-2"
+                                type="checkbox"
+                                id="isMain"
+                                checked={admin.isMain}
+                                onChange={handleCheckbox}
+                                disabled={!!id}
+                            />
+                            <label className="form-check-label fw-bold text-success" htmlFor="isMain">
+                                Administrador principal
+                            </label>
+                        </div>
                     </div>
                     <button
                         type="submit"
-                        className="btn btn-success empresa-form-btn w-100"
+                        className="btn btn-success empresa-form-btn w-100 mt-4"
                         disabled={loading}
                     >
                         {loading ? (
@@ -127,7 +139,10 @@ const AdminForm = () => {
                                 Guardando...
                             </span>
                         ) : (
-                            id ? 'Actualizar' : 'Registrar'
+                            <>
+                                <i className="bi bi-person-plus-fill me-2"></i>
+                                {id ? 'Actualizar' : 'Registrar'}
+                            </>
                         )}
                     </button>
                 </form>
