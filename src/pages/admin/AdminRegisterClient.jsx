@@ -6,6 +6,7 @@ import { db, firebaseConfig } from '../../firebase/config';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+import { regiones, regionesYComunas } from '../../components/regionesComunas';
 
 const secondaryApp = initializeApp(firebaseConfig, "Secondary");
 const secondaryAuth = getAuth(secondaryApp);
@@ -15,6 +16,7 @@ const AdminRegisterClient = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [address, setAddress] = useState('');
+    const [region, setRegion] = useState('');
     const [commune, setCommune] = useState('');
     const [phone, setPhone] = useState('');
     const [error, setError] = useState('');
@@ -33,6 +35,7 @@ const AdminRegisterClient = () => {
                     setFullName(data.fullName || '');
                     setEmail(data.email || '');
                     setAddress(data.address || '');
+                    setRegion(data.region || '');
                     setCommune(data.commune || '');
                     setPhone(data.phone || '');
                 }
@@ -45,7 +48,7 @@ const AdminRegisterClient = () => {
         setError('');
         setLoading(true);
 
-        if (!fullName || !email || (!editMode && !password) || !address || !commune) {
+        if (!fullName || !email || (!editMode && !password) || !address || !region || !commune) {
             setError('Todos los campos son obligatorios (excepto teléfono).');
             setLoading(false);
             return;
@@ -57,11 +60,6 @@ const AdminRegisterClient = () => {
         }
         if (address.length < 5 || address.length > 60) {
             setError('La dirección debe tener entre 5 y 60 caracteres.');
-            setLoading(false);
-            return;
-        }
-        if (commune.length < 3 || commune.length > 30) {
-            setError('La comuna debe tener entre 3 y 30 caracteres.');
             setLoading(false);
             return;
         }
@@ -90,6 +88,7 @@ const AdminRegisterClient = () => {
                     fullName,
                     email,
                     address,
+                    region,
                     commune,
                     phone,
                     userType: 'cliente'
@@ -108,6 +107,7 @@ const AdminRegisterClient = () => {
                     fullName,
                     email,
                     address,
+                    region,
                     commune,
                     phone,
                     userType: 'cliente'
@@ -124,6 +124,7 @@ const AdminRegisterClient = () => {
                     setEmail('');
                     setPassword('');
                     setAddress('');
+                    setRegion('');
                     setCommune('');
                     setPhone('');
                     secondaryAuth.signOut();
@@ -219,21 +220,45 @@ const AdminRegisterClient = () => {
                             </div>
                         </div>
                         <div className="col-md-6">
+                            <label className="form-label fw-bold text-success">Región</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-success text-white">
+                                    <i className="bi bi-globe"></i>
+                                </span>
+                                <select
+                                    className="form-select bg-white"
+                                    value={region}
+                                    onChange={e => {
+                                        setRegion(e.target.value);
+                                        setCommune('');
+                                    }}
+                                    required
+                                >
+                                    <option value="">Selecciona una región</option>
+                                    {regiones.map(r => (
+                                        <option key={r} value={r}>{r}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
                             <label className="form-label fw-bold text-success">Comuna</label>
                             <div className="input-group">
                                 <span className="input-group-text bg-success text-white">
-                                    <i className="bi bi-geo-fill"></i>
+                                    <i className="bi bi-geo"></i>
                                 </span>
-                                <input
-                                    type="text"
-                                    className="form-control bg-white"
+                                <select
+                                    className="form-select bg-white"
                                     value={commune}
                                     onChange={e => setCommune(e.target.value)}
                                     required
-                                    minLength={3}
-                                    maxLength={30}
-                                    placeholder="Comuna"
-                                />
+                                    disabled={!region}
+                                >
+                                    <option value="">Selecciona una comuna</option>
+                                    {region && regionesYComunas[region].map(c => (
+                                        <option key={c} value={c}>{c}</option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
                         <div className="col-md-6">
