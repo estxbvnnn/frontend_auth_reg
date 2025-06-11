@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
+import { regiones, regionesYComunas } from './regionesComunas';
 
 const RegisterForm = () => {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [address, setAddress] = useState('');
+    const [region, setRegion] = useState('');
     const [commune, setCommune] = useState('');
     const [phone, setPhone] = useState('');
     const [error, setError] = useState('');
@@ -28,6 +30,10 @@ const RegisterForm = () => {
             setError('El teléfono debe contener solo números y tener entre 8 y 15 dígitos.');
             return;
         }
+        if (!region || !commune) {
+            setError('Debes seleccionar una región y una comuna.');
+            return;
+        }
 
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -37,6 +43,7 @@ const RegisterForm = () => {
                 fullName,
                 email,
                 address,
+                region,
                 commune,
                 phone,
                 userType: 'cliente'
@@ -73,7 +80,7 @@ const RegisterForm = () => {
                                 </span>
                                 <input
                                     type="text"
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     value={fullName}
                                     onChange={(e) => setFullName(e.target.value)}
                                     required
@@ -91,7 +98,7 @@ const RegisterForm = () => {
                                 </span>
                                 <input
                                     type="email"
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
@@ -109,7 +116,7 @@ const RegisterForm = () => {
                                 </span>
                                 <input
                                     type="password"
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
@@ -127,7 +134,7 @@ const RegisterForm = () => {
                                 </span>
                                 <input
                                     type="text"
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     value={address}
                                     onChange={(e) => setAddress(e.target.value)}
                                     required
@@ -138,21 +145,45 @@ const RegisterForm = () => {
                             </div>
                         </div>
                         <div className="mb-3">
+                            <label className="form-label fw-bold text-success">Región</label>
+                            <div className="input-group">
+                                <span className="input-group-text bg-light">
+                                    <i className="bi bi-globe text-success"></i>
+                                </span>
+                                <select
+                                    className="form-select"
+                                    value={region}
+                                    onChange={e => {
+                                        setRegion(e.target.value);
+                                        setCommune('');
+                                    }}
+                                    required
+                                >
+                                    <option value="">Selecciona una región</option>
+                                    {regiones.map(r => (
+                                        <option key={r} value={r}>{r}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        <div className="mb-3">
                             <label className="form-label fw-bold text-success">Comuna</label>
                             <div className="input-group">
                                 <span className="input-group-text bg-light">
                                     <i className="bi bi-geo-fill text-success"></i>
                                 </span>
-                                <input
-                                    type="text"
-                                    className="form-control"
+                                <select
+                                    className="form-select"
                                     value={commune}
-                                    onChange={(e) => setCommune(e.target.value)}
+                                    onChange={e => setCommune(e.target.value)}
                                     required
-                                    minLength={3}
-                                    maxLength={30}
-                                    placeholder="Comuna"
-                                />
+                                    disabled={!region}
+                                >
+                                    <option value="">Selecciona una comuna</option>
+                                    {region && regionesYComunas[region].map(c => (
+                                        <option key={c} value={c}>{c}</option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
                         <div className="mb-3">
@@ -163,7 +194,7 @@ const RegisterForm = () => {
                                 </span>
                                 <input
                                     type="tel"
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
                                     minLength={8}

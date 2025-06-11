@@ -1,32 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { db } from '../../firebase/config';
+import { db, firebaseConfig } from '../../firebase/config';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { doc, setDoc, getDoc, addDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, setDoc, getDoc, getDocs, collection } from 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+import { regiones, regionesYComunas } from '../../components/regionesComunas';
 
-const regionesYComunas = {
-    "Región de Coquimbo": [
-        "La Serena", "Coquimbo", "Andacollo", "La Higuera", "Paiguano", "Vicuña",
-        "Illapel", "Canela", "Los Vilos", "Salamanca",
-        "Ovalle", "Combarbalá", "Monte Patria", "Punitaqui", "Río Hurtado"
-    ],
-    "Región de Valparaíso": [
-        "Valparaíso", "Viña del Mar", "Concón", "Quilpué", "Villa Alemana", "Quillota", "San Antonio",
-        "Los Andes", "San Felipe", "La Ligua", "Petorca", "Papudo", "Zapallar", "Puchuncaví",
-        "Casablanca", "Juan Fernández", "Isla de Pascua"
-    ],
-    "Región Metropolitana de Santiago": [
-        "Cerrillos", "Cerro Navia", "Conchalí", "El Bosque", "Estación Central", "Huechuraba", "Independencia",
-        "La Cisterna", "La Florida", "La Granja", "La Pintana", "La Reina", "Las Condes", "Lo Barnechea",
-        "Lo Espejo", "Lo Prado", "Macul", "Maipú", "Ñuñoa", "Pedro Aguirre Cerda", "Peñalolén", "Providencia",
-        "Pudahuel", "Quilicura", "Quinta Normal", "Recoleta", "Renca", "San Joaquín", "San Miguel", "San Ramón",
-        "Santiago", "Vitacura", "Puente Alto", "Pirque", "San José de Maipo", "Colina", "Lampa", "Tiltil",
-        "San Bernardo", "Buin", "Calera de Tango", "Paine", "Melipilla", "Alhué", "Curacaví", "María Pinto",
-        "San Pedro", "Talagante", "El Monte", "Isla de Maipo", "Padre Hurtado", "Peñaflor"
-    ]
-};
-const regiones = Object.keys(regionesYComunas);
+const secondaryApp = initializeApp(firebaseConfig, "SecondaryEmpresa");
+const secondaryAuth = getAuth(secondaryApp);
 
 const EmpresaForm = () => {
     const [empresa, setEmpresa] = useState({
@@ -40,7 +23,9 @@ const EmpresaForm = () => {
         contacto: '',
         productos: []
     });
+    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const navigate = useNavigate();
     const { id } = useParams();
     const formRef = useRef(null);
@@ -71,6 +56,9 @@ const EmpresaForm = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
+        setError('');
+        setSuccess('');
+
         if (
             !empresa.nombre ||
             !empresa.rut ||
@@ -79,12 +67,22 @@ const EmpresaForm = () => {
             !empresa.comuna ||
             !empresa.email ||
             !empresa.telefono ||
-            !empresa.contacto
+            !empresa.contacto ||
+            (!id && !password)
         ) {
-            Swal.fire('Error', 'Todos los campos son obligatorios', 'error');
+            setError('Todos los campos son obligatorios');
             scrollToError();
             return;
         }
+        if (!id) {
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+            if (!passwordRegex.test(password)) {
+                setError('La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y un carácter especial.');
+                scrollToError();
+                return;
+            }
+        }
+
         try {
             let emailExists = false;
             let rutExists = false;
@@ -105,25 +103,71 @@ const EmpresaForm = () => {
             });
 
             if (emailExists) {
-                Swal.fire('Error', 'El correo ya está registrado en otra empresa o usuario.', 'error');
+                setError('El correo ya está registrado en otra empresa o usuario.');
                 scrollToError();
                 return;
             }
             if (rutExists) {
-                Swal.fire('Error', 'El RUT ya está registrado en otra empresa o usuario.', 'error');
+                setError('El RUT ya está registrado en otra empresa o usuario.');
                 scrollToError();
                 return;
             }
 
             if (id) {
                 await setDoc(doc(db, 'empresas', id), empresa);
+                Swal.fire('¡Éxito!', 'Empresa actualizada correctamente.', 'success')
+                    .then(() => navigate('/admin/empresas'));
             } else {
-                await addDoc(collection(db, 'empresas'), empresa);
+                // 1. Crear usuario en Auth
+                const userCredential = await createUserWithEmailAndPassword(secondaryAuth, empresa.email, password);
+                const user = userCredential.user;
+
+                // 2. Guardar empresa en Firestore con el UID
+                await setDoc(doc(db, 'empresas', user.uid), {
+                    ...empresa,
+                    userType: 'empresa'
+                });
+
+                // 3. Guardar también en la colección usuarios (para login y saludo)
+                await setDoc(doc(db, 'usuarios', user.uid), {
+                    fullName: empresa.contacto,
+                    email: empresa.email,
+                    userType: 'empresa',
+                    rut: empresa.rut,
+                    direccion: empresa.direccion,
+                    region: empresa.region,
+                    comuna: empresa.comuna,
+                    telefono: empresa.telefono,
+                    contacto: empresa.contacto
+                });
+
+                // 4. Enviar correo de verificación
+                await sendEmailVerification(user);
+
+                await Swal.fire({
+                    icon: 'success',
+                    title: '¡Empresa registrada!',
+                    text: 'Verifica el correo de la empresa para poder ingresar.',
+                    confirmButtonColor: '#43a047'
+                });
+
+                setEmpresa({
+                    nombre: '',
+                    rut: '',
+                    direccion: '',
+                    region: '',
+                    comuna: '',
+                    email: '',
+                    telefono: '',
+                    contacto: '',
+                    productos: []
+                });
+                setPassword('');
+                await secondaryAuth.signOut();
+                navigate('/admin/empresas');
             }
-            Swal.fire('¡Éxito!', id ? 'Empresa actualizada correctamente.' : 'Empresa creada correctamente.', 'success')
-                .then(() => navigate('/admin/empresas'));
-        } catch {
-            Swal.fire('Error', 'Error al guardar', 'error');
+        } catch (err) {
+            setError('No se pudo registrar. Intenta con otro correo.');
             scrollToError();
         }
     };
@@ -147,6 +191,7 @@ const EmpresaForm = () => {
                 <form onSubmit={handleSubmit} ref={formRef}>
                     <h2 className="empresa-form-title mb-4">{id ? 'Editar Empresa' : 'Registrar Nueva Empresa'}</h2>
                     {error && <div className="ecofood-form-container error">{error}</div>}
+                    {success && <div className="ecofood-form-container success">{success}</div>}
                     <div className="row g-3">
                         <div className="col-md-6">
                             <label className="form-label fw-bold text-success">Nombre de la empresa</label>
@@ -300,6 +345,26 @@ const EmpresaForm = () => {
                                 />
                             </div>
                         </div>
+                        {!id && (
+                            <div className="col-md-6">
+                                <label className="form-label fw-bold text-success">Contraseña</label>
+                                <div className="input-group">
+                                    <span className="input-group-text bg-success text-white">
+                                        <i className="bi bi-lock-fill"></i>
+                                    </span>
+                                    <input
+                                        type="password"
+                                        className="form-control bg-white"
+                                        value={password}
+                                        onChange={e => setPassword(e.target.value)}
+                                        required
+                                        minLength={8}
+                                        maxLength={30}
+                                        placeholder="Contraseña para acceso a EcoFood"
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <div className="d-flex flex-column flex-md-row gap-3 mt-4">
                         <button type="submit" className="btn btn-success empresa-form-btn flex-fill">

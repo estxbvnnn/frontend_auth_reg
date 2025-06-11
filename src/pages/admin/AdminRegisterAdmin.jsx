@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { db, firebaseConfig } from '../../firebase/config';
+import { useNavigate } from 'react-router-dom';
 
 const secondaryApp = initializeApp(firebaseConfig, "SecondaryAdmin");
 const secondaryAuth = getAuth(secondaryApp);
@@ -13,6 +14,7 @@ const AdminRegisterAdmin = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const navigate = useNavigate();
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -83,6 +85,22 @@ const AdminRegisterAdmin = () => {
                             maxLength={30}
                         />
                         <button type="submit">Registrar Administrador</button>
+                        <button
+                            type="button"
+                            style={{
+                                marginLeft: 12,
+                                background: "#fff",
+                                color: "#388e3c",
+                                border: "1px solid #388e3c",
+                                borderRadius: 6,
+                                padding: "8px 18px",
+                                fontWeight: "bold",
+                                cursor: "pointer"
+                            }}
+                            onClick={() => navigate('/admin/administradores')}
+                        >
+                            Volver
+                        </button>
                     </>
                 )}
             </form>

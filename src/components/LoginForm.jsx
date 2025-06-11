@@ -9,12 +9,24 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [showVerifyMessage, setShowVerifyMessage] = useState(false);
+    const [loadingUserData, setLoadingUserData] = useState(false);
     const navigate = useNavigate();
+
+    const fetchUserDataWithRetry = async (uid, retries = 3, delay = 500) => {
+        for (let i = 0; i < retries; i++) {
+            const docRef = doc(db, 'usuarios', uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) return docSnap.data();
+            await new Promise(res => setTimeout(res, delay));
+        }
+        return null;
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
         setShowVerifyMessage(false);
+        setLoadingUserData(false);
 
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -23,19 +35,24 @@ const LoginForm = () => {
                 setShowVerifyMessage(true);
                 return;
             }
-            const docRef = doc(db, 'usuarios', userCredential.user.uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                const datos = docSnap.data();
+            setLoadingUserData(true);
+
+            const datos = await fetchUserDataWithRetry(userCredential.user.uid, 3, 500);
+
+            setLoadingUserData(false);
+
+            if (datos) {
                 if (datos.userType === "admin" || datos.tipo === "admin") {
                     navigate("/admin");
                 } else if (datos.userType === "cliente" || datos.tipo === "cliente") {
+                    navigate("/home");
+                } else if (datos.userType === "empresa" || datos.tipo === "empresa") {
                     navigate("/home");
                 } else {
                     setError("Tipo de usuario no permitido.");
                 }
             } else {
-                setError("No se encontraron datos de usuario.");
+                setError("No se encontraron datos de usuario. Si recién te registraste, espera unos segundos y vuelve a intentar.");
             }
         } catch (err) {
             setError('Usuario o contraseña incorrectos. Si ya te registraste, revisa tu correo y confirma tu cuenta.');
@@ -68,7 +85,12 @@ const LoginForm = () => {
                         </button>
                     </div>
                 )}
-                {!showVerifyMessage && (
+                {loadingUserData && (
+                    <div className="success">
+                        <p>Cargando datos de usuario...</p>
+                    </div>
+                )}
+                {!showVerifyMessage && !loadingUserData && (
                     <>
                         <div className="mb-3">
                             <label className="form-label fw-bold text-success">Correo electrónico</label>
@@ -78,7 +100,7 @@ const LoginForm = () => {
                                 </span>
                                 <input
                                     type="email"
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
@@ -96,7 +118,7 @@ const LoginForm = () => {
                                 </span>
                                 <input
                                     type="password"
-                                    className="form-control"
+                                    className="form-control bg-white"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
