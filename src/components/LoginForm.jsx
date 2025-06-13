@@ -43,7 +43,7 @@ const LoginForm = () => {
 
             if (datos) {
                 if (datos.userType === "admin" || datos.tipo === "admin") {
-                    navigate("/admin");
+                    navigate("/home");
                 } else if (datos.userType === "cliente" || datos.tipo === "cliente") {
                     navigate("/home");
                 } else if (datos.userType === "empresa" || datos.tipo === "empresa") {
