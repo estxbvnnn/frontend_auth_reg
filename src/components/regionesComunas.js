@@ -1,4 +1,15 @@
 export const regionesYComunas = {
+    "Región de Tarapacá":[
+        "Iquique", "Alto Hospicio", "Pozo Almonte", "Camiña", "Colchane", "Huara", "Pica"
+    ],
+    "Región de Antofagasta": [
+        "Antofagasta", "Mejillones", "Sierra Gorda", "Taltal", "Calama", "Ollague",
+        "San Pedro de Atacama", "Tocopilla", "María Elena"
+    ],
+    "Región de Atacama": [
+        "Copiapó", "Caldera", "Tierra Amarilla", "Chañaral", "Diego de Almagro",
+        "Vallenar", "Freirina", "Huasco", "Alto del Carmen"
+    ],
     "Región de Coquimbo": [
         "La Serena", "Coquimbo", "Andacollo", "La Higuera", "Paiguano", "Vicuña",
         "Illapel", "Canela", "Los Vilos", "Salamanca",
