@@ -6,6 +6,9 @@ import { auth, db } from '../firebase/config';
 import { regiones, regionesYComunas } from './regionesComunas';
 
 const RegisterForm = () => {
+    const [userType, setUserType] = useState('cliente');
+    const [rut, setRut] = useState('');
+    const [empresaNombre, setEmpresaNombre] = useState('');
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -34,20 +37,54 @@ const RegisterForm = () => {
             setError('Debes seleccionar una región y una comuna.');
             return;
         }
+        if (userType === "empresa") {
+            if (!rut) {
+                setError('El RUT es obligatorio para empresas.');
+                return;
+            }
+            if (!empresaNombre) {
+                setError('El nombre de la empresa es obligatorio.');
+                return;
+            }
+        }
 
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            await setDoc(doc(db, 'usuarios', user.uid), {
+            // Datos comunes para usuarios
+            const userData = {
                 fullName,
                 email,
                 address,
                 region,
                 commune,
                 phone,
-                userType: 'cliente'
-            });
+                userType
+            };
+            if (userType === "empresa") {
+                userData.rut = rut;
+                userData.empresaNombre = empresaNombre;
+            }
+
+            // Guardar en colección usuarios
+            await setDoc(doc(db, 'usuarios', user.uid), userData);
+
+            // Si es empresa, guardar también en colección empresas
+            if (userType === "empresa") {
+                await setDoc(doc(db, 'empresas', user.uid), {
+                    nombre: empresaNombre,
+                    rut,
+                    email,
+                    direccion: address,
+                    region,
+                    comuna: commune,
+                    telefono: phone,
+                    contacto: fullName,
+                    userType: "empresa",
+                    createdAt: new Date()
+                });
+            }
 
             await sendEmailVerification(user);
             setSuccess('Registro exitoso. Verifica tu correo.');
@@ -72,6 +109,55 @@ const RegisterForm = () => {
                 )}
                 {!success && (
                     <>
+                        {/* Selector de tipo de usuario */}
+                        <div className="mb-3">
+                            <label className="form-label fw-bold text-success">Tipo de usuario</label>
+                            <select
+                                className="form-select"
+                                value={userType}
+                                onChange={e => setUserType(e.target.value)}
+                            >
+                                <option value="cliente">Cliente</option>
+                                <option value="empresa">Empresa</option>
+                            </select>
+                        </div>
+                        {/* Campos solo para empresa */}
+                        {userType === "empresa" && (
+                            <>
+                                <div className="mb-3">
+                                    <label className="form-label fw-bold text-success">Nombre de la empresa</label>
+                                    <div className="input-group">
+                                        <span className="input-group-text bg-light">
+                                            <i className="bi bi-building text-success"></i>
+                                        </span>
+                                        <input
+                                            type="text"
+                                            className="form-control bg-white"
+                                            value={empresaNombre}
+                                            onChange={e => setEmpresaNombre(e.target.value)}
+                                            required={userType === "empresa"}
+                                            placeholder="Nombre de la empresa"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label fw-bold text-success">RUT empresa</label>
+                                    <div className="input-group">
+                                        <span className="input-group-text bg-light">
+                                            <i className="bi bi-credit-card-2-front text-success"></i>
+                                        </span>
+                                        <input
+                                            type="text"
+                                            className="form-control bg-white"
+                                            value={rut}
+                                            onChange={e => setRut(e.target.value)}
+                                            required={userType === "empresa"}
+                                            placeholder="RUT empresa"
+                                        />
+                                    </div>
+                                </div>
+                            </>
+                        )}
                         <div className="mb-3">
                             <label className="form-label fw-bold text-success">Nombre completo</label>
                             <div className="input-group">

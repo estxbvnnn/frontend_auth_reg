@@ -1,12 +1,22 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+// Páginas públicas
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import PasswordReset from './pages/PasswordReset';
+import ProductosPublicos from './pages/ProductosPublicos';
+
+// Componentes de protección de rutas
 import ProtectedRoute from './components/ProtectedRoute';
 import ProtectedByRole from './components/ProtectedByRole';
 
+// Páginas de empresa
+import PerfilEmpresa from './pages/empresa/PerfilEmpresa';
+import ProductosEmpresa from './pages/empresa/ProductosEmpresa';
+
+// Páginas de administración
 import AdminNav from './pages/admin/AdminNav';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import EmpresasList from './pages/admin/EmpresasList';
@@ -27,6 +37,25 @@ const App = () => {
                 <Route path="/password-reset" element={<PasswordReset />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/productos" element={<ProductosPublicos />} />
+
+                {/* Rutas protegidas para empresa */}
+                <Route
+                    path="/empresa/perfil"
+                    element={
+                        <ProtectedByRole allowed={["empresa"]}>
+                            <PerfilEmpresa />
+                        </ProtectedByRole>
+                    }
+                />
+                <Route
+                    path="/empresa/productos"
+                    element={
+                        <ProtectedByRole allowed={["empresa"]}>
+                            <ProductosEmpresa />
+                        </ProtectedByRole>
+                    }
+                />
 
                 {/* Rutas administrativas protegidas */}
                 <Route path="/admin" element={
@@ -65,18 +94,18 @@ const App = () => {
                         <AdminRegisterClient />
                     </ProtectedByRole>
                 } />
+                <Route path="/admin/clientes/editar/:id" element={
+                    <ProtectedByRole allowed={["admin"]}>
+                        <AdminNav />
+                        <AdminRegisterClient />
+                    </ProtectedByRole>
+                } />
                 <Route path="/admin/administradores" element={
                     <ProtectedByRole allowed={["admin"]}>
                         <AdminNav />
                         <AdminsList />
                     </ProtectedByRole>
                 } />
-                <Route path="/admin/clientes/editar/:id" element={
-                    <ProtectedByRole allowed={["admin"]}>
-                        <AdminNav />
-                        <AdminRegisterClient />
-                        </ProtectedByRole>
-                    } />
                 <Route path="/admin/administradores/nuevo" element={
                     <ProtectedByRole allowed={["admin"]}>
                         <AdminNav />

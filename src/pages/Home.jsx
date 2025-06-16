@@ -42,6 +42,11 @@ const Home = () => {
                 <nav className="menu-superior flex-nav">
                     <ul className="nav-list">
                         <li><Link to="/home" className="boton-verde">Inicio</Link></li>
+                        <li>
+                            <Link to="/productos" className="boton-verde">
+                                <i className="bi bi-box-seam me-1"></i>Productos publicados
+                            </Link>
+                        </li>
                         {!currentUser && (
                             <>
                                 <li><Link to="/register" className="boton-verde">Registrarse</Link></li>
@@ -55,6 +60,17 @@ const Home = () => {
                                 <span role="img" aria-label="user" className="nav-usericon">👤</span>
                                 {fullName || 'Usuario'}
                             </span>
+                            {/* Botones especiales solo para empresa */}
+                            {userData && (userData.userType === 'empresa' || userData.tipo === 'empresa') && (
+                                <span style={{ marginLeft: 16 }}>
+                                    <Link to="/empresa/perfil" className="btn btn-success me-2">
+                                        <i className="bi bi-person-badge me-1"></i>Perfil Empresa
+                                    </Link>
+                                    <Link to="/empresa/productos" className="btn btn-primary">
+                                        <i className="bi bi-box-seam me-1"></i>Mis Productos
+                                    </Link>
+                                </span>
+                            )}
                             {userData && (userData.userType === 'admin' || userData.tipo === 'admin') && (
                                 <button
                                     onClick={() => navigate('/admin')}
@@ -140,5 +156,4 @@ const Home = () => {
         </div>
     );
 };
-
 export default Home;
