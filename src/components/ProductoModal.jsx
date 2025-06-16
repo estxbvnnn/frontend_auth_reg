@@ -10,6 +10,14 @@ export default function ProductoModal({ show, setShow, userData, handleRefresh, 
       Swal.fire("Completa todos los campos obligatorios", "", "warning");
       return;
     }
+    if (formData.precio > 9999999) {
+      Swal.fire("El precio no puede ser mayor a 9.999.999", "", "error");
+      return;
+    }
+    if (formData.cantidad > 999999) {
+      Swal.fire("La cantidad no puede ser mayor a 999.999", "", "error");
+      return;
+    }
     if (dayjs(formData.vencimiento).isBefore(dayjs(), 'day')) {
       Swal.fire("La fecha de vencimiento no puede ser anterior a hoy", "", "error");
       return;
@@ -74,8 +82,13 @@ export default function ProductoModal({ show, setShow, userData, handleRefresh, 
                       placeholder="Precio"
                       value={formData.precio || ""}
                       min={0}
+                      max={9999999}
                       step={0.01}
-                      onChange={e => setFormData(f => ({ ...f, precio: Number(e.target.value) }))}
+                      onChange={e => {
+                        let value = e.target.value;
+                        if (value > 9999999) value = 9999999;
+                        setFormData(f => ({ ...f, precio: Number(value) }));
+                      }}
                       required
                     />
                   </td>
@@ -89,7 +102,12 @@ export default function ProductoModal({ show, setShow, userData, handleRefresh, 
                       placeholder="Cantidad"
                       value={formData.cantidad || ""}
                       min={1}
-                      onChange={e => setFormData(f => ({ ...f, cantidad: Number(e.target.value) }))}
+                      max={999999}
+                      onChange={e => {
+                        let value = e.target.value;
+                        if (value > 999999) value = 999999;
+                        setFormData(f => ({ ...f, cantidad: Number(value) }));
+                      }}
                       required
                     />
                   </td>
