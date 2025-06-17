@@ -78,28 +78,13 @@ const EmpresasList = () => {
                                         <Link to={`/admin/empresas/editar/${emp.id}`} className="admin-btn">
                                             Editar
                                         </Link>
-                                        {Array.isArray(emp.productos) && emp.productos.length > 0 ? (
-                                            <Link
-                                                to={`/admin/empresas/${emp.id}/productos`}
-                                                className="admin-btn"
-                                                style={{ background: '#1976d2' }}
-                                            >
-                                                Ver productos
-                                            </Link>
-                                        ) : (
-                                            <button
-                                                className="admin-btn"
-                                                style={{
-                                                    background: '#bdbdbd',
-                                                    color: '#fff',
-                                                    cursor: 'not-allowed'
-                                                }}
-                                                disabled
-                                                title="Esta empresa aún no tiene productos"
-                                            >
-                                                Ver productos
-                                            </button>
-                                        )}
+                                        <Link
+                                            to={`/admin/empresas/${emp.id}/productos`}
+                                            className="admin-btn"
+                                            style={{ background: '#1976d2' }}
+                                        >
+                                            Ver productos
+                                        </Link>
                                         <button
                                             className="admin-btn admin-btn-danger"
                                             onClick={() => handleDelete(emp.id)}

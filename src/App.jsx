@@ -26,6 +26,7 @@ import AdminsList from './pages/admin/AdminList';
 import AdminForm from './pages/admin/AdminForm';
 import AdminRegisterClient from './pages/admin/AdminRegisterClient';
 import AdminRegisterAdmin from './pages/admin/AdminRegisterAdmin';
+import ProductosEmpresaAdmin from './pages/admin/ProductosEmpresaAdmin'; // <-- AGREGADO
 
 const App = () => {
     return (
@@ -80,6 +81,13 @@ const App = () => {
                     <ProtectedByRole allowed={["admin"]}>
                         <AdminNav />
                         <EmpresaForm />
+                    </ProtectedByRole>
+                } />
+                {/* AGREGADO: Ruta para ver/gestionar productos de una empresa como admin */}
+                <Route path="/admin/empresas/:id/productos" element={
+                    <ProtectedByRole allowed={["admin"]}>
+                        <AdminNav />
+                        <ProductosEmpresaAdmin />
                     </ProtectedByRole>
                 } />
                 <Route path="/admin/clientes" element={

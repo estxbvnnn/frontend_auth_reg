@@ -52,7 +52,6 @@ const RegisterForm = () => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Datos comunes para usuarios
             const userData = {
                 fullName,
                 email,
@@ -67,10 +66,8 @@ const RegisterForm = () => {
                 userData.empresaNombre = empresaNombre;
             }
 
-            // Guardar en colección usuarios
             await setDoc(doc(db, 'usuarios', user.uid), userData);
 
-            // Si es empresa, guardar también en colección empresas
             if (userType === "empresa") {
                 await setDoc(doc(db, 'empresas', user.uid), {
                     nombre: empresaNombre,
