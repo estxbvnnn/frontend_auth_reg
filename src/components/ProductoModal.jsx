@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 export default function ProductoModal({ show, setShow, userData, handleRefresh, formData = {}, setFormData }) {
   const guardarProducto = async (e) => {
     e.preventDefault();
-    if (!formData.nombre?.trim() || !formData.vencimiento || formData.cantidad < 1) {
+    if (!formData.nombre?.trim() || !formData.fechaVencimiento || formData.cantidad < 1) {
       Swal.fire("Completa todos los campos obligatorios", "", "warning");
       return;
     }
@@ -18,7 +18,7 @@ export default function ProductoModal({ show, setShow, userData, handleRefresh, 
       Swal.fire("La cantidad no puede ser mayor a 999.999", "", "error");
       return;
     }
-    if (dayjs(formData.vencimiento).isBefore(dayjs(), 'day')) {
+    if (dayjs(formData.fechaVencimiento).isBefore(dayjs(), 'day')) {
       Swal.fire("La fecha de vencimiento no puede ser anterior a hoy", "", "error");
       return;
     }
@@ -76,21 +76,31 @@ export default function ProductoModal({ show, setShow, userData, handleRefresh, 
                 <tr>
                   <th className="bg-success text-white">Precio</th>
                   <td>
-                    <input
-                      type="number"
-                      className="form-control"
-                      placeholder="Precio"
-                      value={formData.precio || ""}
-                      min={0}
-                      max={9999999}
-                      step={0.01}
-                      onChange={e => {
-                        let value = e.target.value;
-                        if (value > 9999999) value = 9999999;
-                        setFormData(f => ({ ...f, precio: Number(value) }));
-                      }}
-                      required
-                    />
+                    <div className="input-group">
+                      <input
+                        type="number"
+                        className="form-control"
+                        placeholder="Precio"
+                        value={formData.precio === 0 ? 0 : formData.precio || ""}
+                        min={0}
+                        max={9999999}
+                        step={0.01}
+                        onChange={e => {
+                          let value = e.target.value;
+                          if (value === "") {
+                            setFormData(f => ({ ...f, precio: "" }));
+                          } else {
+                            if (value > 9999999) value = 9999999;
+                            setFormData(f => ({ ...f, precio: Number(value) }));
+                          }
+                        }}
+                        required
+                      />
+                      <span className="input-group-text" style={{ background: "#e8f5e9", color: "#388e3c", fontWeight: 600 }}>
+                        {Number(formData.precio) === 0 ? "Gratis" : "$"}
+                      </span>
+                    </div>
+                    <small className="text-muted">Si el precio es 0, el producto será marcado como <b>Gratis</b>.</small>
                   </td>
                 </tr>
                 <tr>
@@ -118,8 +128,8 @@ export default function ProductoModal({ show, setShow, userData, handleRefresh, 
                     <input
                       type="date"
                       className="form-control"
-                      value={formData.vencimiento || ""}
-                      onChange={e => setFormData(f => ({ ...f, vencimiento: e.target.value }))}
+                      value={formData.fechaVencimiento || ""}
+                      onChange={e => setFormData(f => ({ ...f, fechaVencimiento: e.target.value }))}
                       required
                     />
                   </td>
