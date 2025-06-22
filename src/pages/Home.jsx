@@ -120,10 +120,11 @@ const Home = () => {
                 </div>
                 <div className="mensaje-centro">
                     <h1 className="titulo-verde hero-title">
-                        ¡Bienvenido a EcoFood!
+                        Bienvenido a <span style={{ color: "#388e3c" }}>EcoFood</span>
                     </h1>
-                    <p className="texto-negro hero-desc">
-                        La plataforma que conecta empresas y clientes para combatir el desperdicio de alimentos y cuidar el planeta.
+                    <p className="texto-negro hero-desc" style={{ fontSize: 20 }}>
+                        Plataforma profesional para la gestión eficiente de excedentes alimentarios.<br />
+                        Conectamos empresas y consumidores para reducir el desperdicio y potenciar la economía circular.
                     </p>
                     {currentUser && (
                         <div className="saludo-animado saludo-ecofood">
@@ -133,22 +134,32 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Características */}
+            {/* Características profesionales */}
             <section className={`caracteristicas fade-in-section${fade ? ' is-visible' : ''}`}>
                 <div className="caracteristica card-animada">
-                    <div className="caracteristica-icon">🛒</div>
-                    <h3 className="titulo-verde">Compra Inteligente</h3>
-                    <p>Accede a productos de calidad a precios reducidos y ayuda a reducir el desperdicio.</p>
+                    <div className="caracteristica-icon"><i className="bi bi-bar-chart-line"></i></div>
+                    <h3 className="titulo-verde">Dashboard Inteligente</h3>
+                    <p>Visualiza métricas clave de impacto, ventas y reducción de desperdicio en tiempo real.</p>
                 </div>
                 <div className="caracteristica card-animada">
-                    <div className="caracteristica-icon">🏢</div>
-                    <h3 className="titulo-verde">Empresas Comprometidas</h3>
-                    <p>Las empresas pueden publicar sus excedentes y llegar a más clientes responsables.</p>
+                    <div className="caracteristica-icon"><i className="bi bi-people"></i></div>
+                    <h3 className="titulo-verde">Gestión de Usuarios</h3>
+                    <p>Administra empresas, clientes y administradores con roles y permisos avanzados.</p>
                 </div>
                 <div className="caracteristica card-animada">
-                    <div className="caracteristica-icon">🌎</div>
-                    <h3 className="titulo-verde">Impacto Ambiental</h3>
-                    <p>Juntos generamos un impacto positivo en la sociedad y el medio ambiente.</p>
+                    <div className="caracteristica-icon"><i className="bi bi-shield-check"></i></div>
+                    <h3 className="titulo-verde">Seguridad y Privacidad</h3>
+                    <p>Protegemos tus datos con autenticación robusta y cifrado de información.</p>
+                </div>
+                <div className="caracteristica card-animada">
+                    <div className="caracteristica-icon"><i className="bi bi-globe2"></i></div>
+                    <h3 className="titulo-verde">Sustentabilidad Global</h3>
+                    <p>Contribuye a los Objetivos de Desarrollo Sostenible (ODS) y reporta tu impacto ambiental.</p>
+                </div>
+                <div className="caracteristica card-animada">
+                    <div className="caracteristica-icon"><i className="bi bi-graph-up-arrow"></i></div>
+                    <h3 className="titulo-verde">Optimización de Inventario</h3>
+                    <p>Reduce pérdidas y maximiza ganancias gestionando tus productos de forma eficiente.</p>
                 </div>
             </section>
 
@@ -156,15 +167,16 @@ const Home = () => {
             <section className={`impacto-global fade-in-section${fade ? ' is-visible' : ''}`}>
                 <div className="contenido-impacto">
                     <div className="texto-impacto">
-                        <h3>¿Sabías que...?</h3>
-                        <p>
-                            Cada año se desperdician millones de toneladas de alimentos en el mundo. EcoFood te ayuda a ser parte de la solución.
-                        </p>
+                        <h3>¿Por qué elegir EcoFood?</h3>
                         <ul>
-                            <li>Reduce tu huella ecológica</li>
-                            <li>Apoya a empresas responsables</li>
-                            <li>Accede a productos frescos y económicos</li>
+                            <li><b>Reducción de costos:</b> Da salida a tus excedentes y mejora tu rentabilidad.</li>
+                            <li><b>Responsabilidad social:</b> Apoya a comunidades y promueve el consumo responsable.</li>
+                            <li><b>Transparencia:</b> Accede a reportes detallados de tu contribución ambiental.</li>
+                            <li><b>Soporte dedicado:</b> Equipo profesional para ayudarte en cada paso.</li>
                         </ul>
+                        <p>
+                            Únete a la red de empresas y consumidores que están transformando la industria alimentaria.
+                        </p>
                     </div>
                     <div className="imagen-impacto">
                         <img src={frutita} alt="Frutas EcoFood" className="impacto-img-animada" />
@@ -172,9 +184,29 @@ const Home = () => {
                 </div>
             </section>
 
+            {/* Llamado a la acción profesional */}
+            <section className="cta-ecofood fade-in-section">
+                <div className="container text-center py-5">
+                    <h2 className="titulo-verde mb-3" style={{ fontWeight: 700 }}>
+                        ¿Listo para profesionalizar tu gestión de alimentos?
+                    </h2>
+                    <p className="mb-4" style={{ fontSize: 18 }}>
+                        Regístrate hoy y accede a herramientas avanzadas para potenciar tu empresa y cuidar el planeta.
+                    </p>
+                    {!currentUser && (
+                        <Link to="/register" className="btn btn-success btn-lg px-5 py-3" style={{ fontSize: 20, fontWeight: 600 }}>
+                            Comenzar ahora
+                        </Link>
+                    )}
+                </div>
+            </section>
+
             {/* Footer */}
             <footer className="ecofood-footer">
-                <p>EcoFood &copy; 2025 - Todos los derechos reservados</p>
+                <p>
+                    EcoFood &copy; 2025 - Todos los derechos reservados | 
+                    <span style={{ marginLeft: 8 }}>Desarrollado por profesionales en tecnología y sustentabilidad</span>
+                </p>
             </footer>
             <style>{`
                 .btn-gradient-green {

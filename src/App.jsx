@@ -32,7 +32,11 @@ import AdminsList from './pages/admin/AdminList';
 import AdminForm from './pages/admin/AdminForm';
 import AdminRegisterClient from './pages/admin/AdminRegisterClient';
 import AdminRegisterAdmin from './pages/admin/AdminRegisterAdmin';
+<<<<<<< HEAD
 import ProductosEmpresaAdmin from './pages/admin/ProductosEmpresaAdmin';
+=======
+import ProductosEmpresaAdmin from './pages/admin/ProductosEmpresaAdmin'; // <-- AGREGADO
+>>>>>>> ffed50f4faa853e53a0e91c6b7457e078ff561f0
 
 const App = () => {
     return (
@@ -131,6 +135,10 @@ const App = () => {
                         <EmpresaForm />
                     </ProtectedByRole>
                 } />
+<<<<<<< HEAD
+=======
+                {/* AGREGADO: Ruta para ver/gestionar productos de una empresa como admin */}
+>>>>>>> ffed50f4faa853e53a0e91c6b7457e078ff561f0
                 <Route path="/admin/empresas/:id/productos" element={
                     <ProtectedByRole allowed={["admin"]}>
                         <AdminNav />

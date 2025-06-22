@@ -1,5 +1,5 @@
 import { db } from "../firebase/config";
-import { collection, setDoc, getDocs, updateDoc, query, where, deleteDoc, doc, orderBy, limit, startAt, endAt, startAfter, getCountFromServer } from "firebase/firestore";
+import { collection, setDoc, getDocs, updateDoc, query, where, deleteDoc, doc, orderBy, limit, startAt, endAt, getCountFromServer } from "firebase/firestore";
 
 export const addProducto = async (producto) => {
   const ref = doc(collection(db, "productos"));
@@ -24,10 +24,16 @@ export async function obtenerTotalProductos(empresaId, busqueda = "", estadoFilt
   return snapshot.data().count;
 }
 
-export const getProductosByEmpresaPagina = async (empresaId, pagina = 0, nombre = "", estadoFiltro = "todos", orden = "nombre-asc", pageSize = 5) => {
+export const getProductosByEmpresaPagina = async (
+  empresaId,
+  pagina = 0,
+  nombre = "",
+  estadoFiltro = "todos",
+  orden = "nombre-asc",
+  pageSize = 5
+) => {
   let ref = collection(db, "productos");
   let q = query(ref, where("empresaId", "==", empresaId));
-  // Filtros
   if (nombre.trim() !== "") {
     const term = nombre.toLowerCase();
     q = query(q, orderBy("nombre"), startAt(term), endAt(term + "\uf8ff"));
@@ -35,9 +41,14 @@ export const getProductosByEmpresaPagina = async (empresaId, pagina = 0, nombre 
     if (orden.startsWith("nombre")) q = query(q, orderBy("nombre", orden.endsWith("desc") ? "desc" : "asc"));
     if (orden.startsWith("precio")) q = query(q, orderBy("precio", orden.endsWith("desc") ? "desc" : "asc"));
   }
-  q = query(q, limit(pageSize));
+
   const snapshot = await getDocs(q);
-  const productos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  const sinMas = productos.length < pageSize;
+  const productosAll = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+  const start = pagina * pageSize;
+  const end = start + pageSize;
+  const productos = productosAll.slice(start, end);
+
+  const sinMas = productos.length < pageSize || end >= productosAll.length;
   return { productos, sinMas };
 };
