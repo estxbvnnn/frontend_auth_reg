@@ -65,30 +65,37 @@ export default function PerfilEmpresa() {
 
     return (
         <div
-            className="ecofood-form-container empresa-form-custom shadow-lg p-4 bg-white rounded"
-            style={{ maxWidth: 800, margin: "40px auto" }}
+            className="ecofood-form-container empresa-form-custom shadow-lg p-4 bg-white rounded-4"
+            style={{ maxWidth: 900, margin: "40px auto", border: "1px solid #e0f2f1" }}
         >
-            <div className="d-flex flex-column flex-md-row align-items-center mb-4">
+            <div className="d-flex flex-column flex-md-row align-items-center mb-4 pb-3 border-bottom">
                 <img
                     src={empresaAvatar}
                     alt="Logo Empresa"
                     className="rounded-circle shadow"
-                    style={{ width: 110, height: 110, objectFit: "cover", border: "4px solid #81c784", marginRight: 32, background: "#fff" }}
+                    style={{
+                        width: 120,
+                        height: 120,
+                        objectFit: "cover",
+                        border: "5px solid #43e97b",
+                        marginRight: 36,
+                        background: "#fff"
+                    }}
                 />
                 <div>
-                    <h2 className="mb-1 titulo-verde" style={{ fontWeight: 700 }}>{empresa.nombre}</h2>
+                    <h2 className="mb-1 titulo-verde" style={{ fontWeight: 800, fontSize: 32 }}>{empresa.nombre}</h2>
                     <div className="text-muted mb-2" style={{ fontSize: 18 }}>
                         <i className="bi bi-geo-alt-fill me-2"></i>
                         {empresa.direccion}, {empresa.comuna}, {empresa.region}
                     </div>
-                    <span className="badge bg-success" style={{ fontSize: 15 }}>
+                    <span className="badge bg-gradient-ecofood px-3 py-2" style={{ fontSize: 16, fontWeight: 500 }}>
                         <i className="bi bi-building me-1"></i> Empresa EcoFood
                     </span>
                 </div>
             </div>
             {!edit ? (
                 <>
-                    <div className="row g-3 mb-3">
+                    <div className="row g-4 mb-3">
                         <div className="col-md-6">
                             <div className="mb-2"><b>RUT:</b> <span className="text-dark">{empresa.rut}</span></div>
                             <div className="mb-2"><b>Email:</b> <span className="text-dark">{empresa.email}</span></div>
@@ -100,8 +107,8 @@ export default function PerfilEmpresa() {
                             <div className="mb-2"><b>Comuna:</b> <span className="text-dark">{empresa.comuna}</span></div>
                         </div>
                     </div>
-                    <div className="d-flex gap-3 mt-3">
-                        <button className="btn btn-success empresa-form-btn flex-fill" onClick={() => {
+                    <div className="d-flex gap-3 mt-3 justify-content-end">
+                        <button className="btn btn-success empresa-form-btn px-4" onClick={() => {
                             setForm({
                                 nombre: empresa.nombre,
                                 direccion: empresa.direccion,
@@ -117,7 +124,7 @@ export default function PerfilEmpresa() {
                             <i className="bi bi-pencil-square me-1"></i>Editar Perfil
                         </button>
                         <button
-                            className="btn btn-outline-secondary flex-fill"
+                            className="btn btn-outline-secondary px-4"
                             onClick={() => navigate("/home")}
                         >
                             <i className="bi bi-arrow-left me-1"></i>Volver al inicio
@@ -271,15 +278,15 @@ export default function PerfilEmpresa() {
                             />
                         </div>
                     </div>
-                    <div className="d-flex gap-3 mt-4">
-                        <button className="btn btn-success empresa-form-btn flex-fill" type="submit">
+                    <div className="d-flex gap-3 mt-4 justify-content-end">
+                        <button className="btn btn-success empresa-form-btn px-4" type="submit">
                             <i className="bi bi-save me-1"></i>Guardar
                         </button>
-                        <button className="btn btn-secondary empresa-form-btn flex-fill" type="button" onClick={() => setEdit(false)}>
+                        <button className="btn btn-secondary empresa-form-btn px-4" type="button" onClick={() => setEdit(false)}>
                             Cancelar
                         </button>
                         <button
-                            className="btn btn-outline-secondary flex-fill"
+                            className="btn btn-outline-secondary px-4"
                             type="button"
                             onClick={() => navigate("/home")}
                         >
@@ -288,6 +295,33 @@ export default function PerfilEmpresa() {
                     </div>
                 </form>
             )}
+            <style>{`
+                .bg-gradient-ecofood {
+                    background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%) !important;
+                    color: #fff !important;
+                    border: none;
+                }
+                .empresa-form-custom {
+                    border-radius: 22px;
+                    border: 1px solid #e0f2f1;
+                }
+                .titulo-verde {
+                    color: #43a047;
+                }
+                .empresa-form-btn {
+                    border-radius: 30px;
+                    font-weight: 600;
+                }
+                .form-label {
+                    font-size: 1rem;
+                }
+                .input-group-text {
+                    border-radius: 30px 0 0 30px;
+                }
+                .form-control, .form-select, textarea {
+                    border-radius: 0 30px 30px 0;
+                }
+            `}</style>
         </div>
     );
 }

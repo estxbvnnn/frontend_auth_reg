@@ -42,12 +42,14 @@ const LoginForm = () => {
             setLoadingUserData(false);
 
             if (datos) {
+                // Log para depuración
+                // console.log("Datos usuario:", datos);
                 if (datos.userType === "admin" || datos.tipo === "admin") {
                     navigate("/home");
                 } else if (datos.userType === "cliente" || datos.tipo === "cliente") {
-                    navigate("/home");
+                    navigate("/cliente");
                 } else if (datos.userType === "empresa" || datos.tipo === "empresa") {
-                    navigate("/home");
+                    navigate("/empresa/perfil");
                 } else {
                     setError("Tipo de usuario no permitido.");
                 }

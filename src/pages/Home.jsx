@@ -7,7 +7,7 @@ import logo from '../assets/img/Recurso 5.svg';
 import frutita from '../assets/img/frutita.jpg';
 
 const Home = () => {
-    const { currentUser, userData } = useAuth();
+    const { currentUser, userData, loading } = useAuth();
     const navigate = useNavigate();
     const [fullName, setFullName] = useState('');
     const [fade, setFade] = useState(false);
@@ -35,6 +35,8 @@ const Home = () => {
         navigate('/login');
     };
 
+    if (loading) return <div>Cargando...</div>;
+
     return (
         <div>
             {/* Menú superior */}
@@ -54,30 +56,51 @@ const Home = () => {
                             </>
                         )}
                     </ul>
-                    {currentUser && (
+                    {currentUser && userData && (
                         <div className="nav-user">
                             <span className="nav-username">
                                 <span role="img" aria-label="user" className="nav-usericon">👤</span>
                                 {fullName || 'Usuario'}
                             </span>
                             {/* Botones especiales solo para empresa */}
-                            {userData && (userData.userType === 'empresa' || userData.tipo === 'empresa') && (
+                            {(userData.userType === 'empresa' || userData.tipo === 'empresa') && (
                                 <span style={{ marginLeft: 16 }}>
                                     <Link to="/empresa/perfil" className="btn btn-success me-2">
                                         <i className="bi bi-person-badge me-1"></i>Perfil Empresa
                                     </Link>
-                                    <Link to="/empresa/productos" className="btn btn-primary">
+                                    <Link to="/empresa/productos" className="btn btn-primary me-2">
                                         <i className="bi bi-box-seam me-1"></i>Mis Productos
+                                    </Link>
+                                    <Link
+                                        to="/empresa/solicitudes"
+                                        className="btn btn-gradient-green"
+                                        style={{
+                                            background: "linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)",
+                                            color: "#fff",
+                                            border: "none",
+                                            fontWeight: 600
+                                        }}
+                                    >
+                                        <i className="bi bi-list-check me-1"></i>Ver Solicitudes
                                     </Link>
                                 </span>
                             )}
-                            {userData && (userData.userType === 'admin' || userData.tipo === 'admin') && (
+                            {/* Botón especial para admin */}
+                            {(userData.userType === 'admin' || userData.tipo === 'admin') && (
                                 <button
                                     onClick={() => navigate('/admin')}
                                     className="admin-panel-btn"
                                 >
                                     Panel Admin
                                 </button>
+                            )}
+                            {/* Solo un botón para cliente */}
+                            {(userData.userType === 'cliente' || userData.tipo === 'cliente') && (
+                                <span style={{ marginLeft: 16 }}>
+                                    <Link to="/cliente" className="btn btn-success btn-lg me-2">
+                                        <i className="bi bi-house-door me-1"></i>Inicio Cliente
+                                    </Link>
+                                </span>
                             )}
                             <button
                                 onClick={handleLogout}
@@ -153,7 +176,20 @@ const Home = () => {
             <footer className="ecofood-footer">
                 <p>EcoFood &copy; 2025 - Todos los derechos reservados</p>
             </footer>
+            <style>{`
+                .btn-gradient-green {
+                    background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%) !important;
+                    color: #fff !important;
+                    border: none !important;
+                    font-weight: 600;
+                }
+                .btn-gradient-green:hover, .btn-gradient-green:focus {
+                    background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%) !important;
+                    color: #fff !important;
+                }
+            `}</style>
         </div>
     );
 };
+
 export default Home;

@@ -28,6 +28,12 @@ export const regionesYComunas = {
         "Santiago", "Vitacura", "Puente Alto", "Pirque", "San José de Maipo", "Colina", "Lampa", "Tiltil",
         "San Bernardo", "Buin", "Calera de Tango", "Paine", "Melipilla", "Alhué", "Curacaví", "María Pinto",
         "San Pedro", "Talagante", "El Monte", "Isla de Maipo", "Padre Hurtado", "Peñaflor"
+    ],
+    "Región del Libertador General Bernardo O'Higgins": [
+        "Rancagua", "Codegua", "Coinco", "Coltauco", "Doñihue", "Graneros", "Las Cabras",
+        "Machalí", "Malloa", "Mostazal", "Olivar", "Peumo", "Pichidegua", "Quinta de Tilcoco",
+        "Rengo", "Requínoa", "San Vicente de Tagua Tagua", "Pichilemu", "La Estrella",
+        "Litueche", "Marchihue", "Navidad", "Paredones"
     ]
 };
 

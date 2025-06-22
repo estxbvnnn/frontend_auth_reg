@@ -47,7 +47,7 @@ const ProductosPublicos = () => {
         <div className="container py-5">
             <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                 <h2 className="text-success fw-bold mb-0" style={{ letterSpacing: 1 }}>
-                    <i className="bi bi-box-seam-fill me-2"></i>Productos Públicos a vender
+                    <i className="bi bi-box-seam-fill me-2"></i>Productos a vender
                 </h2>
                 <button
                     className="btn btn-outline-success btn-lg d-flex align-items-center gap-2"

@@ -9,12 +9,18 @@ import PasswordReset from './pages/PasswordReset';
 import ProductosPublicos from './pages/ProductosPublicos';
 
 // Componentes de protección de rutas
-import ProtectedRoute from './components/ProtectedRoute';
 import ProtectedByRole from './components/ProtectedByRole';
 
 // Páginas de empresa
 import PerfilEmpresa from './pages/empresa/PerfilEmpresa';
 import ProductosEmpresa from './pages/empresa/ProductosEmpresa';
+import SolicitudesEmpresa from './pages/empresa/SolicitudesEmpresa'; // <-- Importa la página de solicitudes
+
+// Páginas de cliente
+import HomeCliente from './pages/cliente/HomeCliente';
+import VerProductos from './pages/cliente/VerProductos';
+import MisPedidos from './pages/cliente/MisPedidos';
+import EditarPerfil from './pages/cliente/EditarPerfil';
 
 // Páginas de administración
 import AdminNav from './pages/admin/AdminNav';
@@ -26,6 +32,7 @@ import AdminsList from './pages/admin/AdminList';
 import AdminForm from './pages/admin/AdminForm';
 import AdminRegisterClient from './pages/admin/AdminRegisterClient';
 import AdminRegisterAdmin from './pages/admin/AdminRegisterAdmin';
+import ProductosEmpresaAdmin from './pages/admin/ProductosEmpresaAdmin';
 
 const App = () => {
     return (
@@ -56,6 +63,48 @@ const App = () => {
                         </ProtectedByRole>
                     }
                 />
+                <Route
+                    path="/empresa/solicitudes"
+                    element={
+                        <ProtectedByRole allowed={["empresa"]}>
+                            <SolicitudesEmpresa />
+                        </ProtectedByRole>
+                    }
+                />
+
+                {/* Rutas protegidas para cliente */}
+                <Route
+                    path="/cliente"
+                    element={
+                        <ProtectedByRole allowed={["cliente"]}>
+                            <HomeCliente />
+                        </ProtectedByRole>
+                    }
+                />
+                <Route
+                    path="/cliente/productos"
+                    element={
+                        <ProtectedByRole allowed={["cliente"]}>
+                            <VerProductos />
+                        </ProtectedByRole>
+                    }
+                />
+                <Route
+                    path="/cliente/pedidos"
+                    element={
+                        <ProtectedByRole allowed={["cliente"]}>
+                            <MisPedidos />
+                        </ProtectedByRole>
+                    }
+                />
+                <Route
+                    path="/cliente/perfil"
+                    element={
+                        <ProtectedByRole allowed={["cliente"]}>
+                            <EditarPerfil />
+                        </ProtectedByRole>
+                    }
+                />
 
                 {/* Rutas administrativas protegidas */}
                 <Route path="/admin" element={
@@ -80,6 +129,12 @@ const App = () => {
                     <ProtectedByRole allowed={["admin"]}>
                         <AdminNav />
                         <EmpresaForm />
+                    </ProtectedByRole>
+                } />
+                <Route path="/admin/empresas/:id/productos" element={
+                    <ProtectedByRole allowed={["admin"]}>
+                        <AdminNav />
+                        <ProductosEmpresaAdmin />
                     </ProtectedByRole>
                 } />
                 <Route path="/admin/clientes" element={
@@ -115,7 +170,7 @@ const App = () => {
                 <Route path="/admin/administradores/editar/:id" element={
                     <ProtectedByRole allowed={["admin"]}>
                         <AdminNav />
-                        <AdminForm />
+                        <AdminRegisterAdmin />
                     </ProtectedByRole>
                 } />
             </Routes>
