@@ -58,7 +58,7 @@ export default function MisPedidos() {
                         {p.estado.charAt(0).toUpperCase() + p.estado.slice(1)}
                       </span>
                     </td>
-                    <td>{new Date(p.fecha.seconds * 1000).toLocaleDateString()}</td>
+                    <td>{p.fecha && p.fecha.seconds ? new Date(p.fecha.seconds * 1000).toLocaleDateString() : ""}</td>
                   </tr>
                 ))}
               </tbody>

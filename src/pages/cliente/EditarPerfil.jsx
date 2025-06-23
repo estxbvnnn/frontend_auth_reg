@@ -50,7 +50,7 @@ export default function EditarPerfil() {
         className="btn btn-outline-success mb-4"
         onClick={() => navigate("/cliente")}
       >
-        <i className="bi bi-arrow-left me-2"></i>Volver al Panel Cliente
+        <i className="bi bi-arrow-left me-2"></i>Panel Cliente
       </button>
       <div className="mx-auto" style={{ maxWidth: 520 }}>
         <div className="card shadow border-0 p-4 rounded-4">
