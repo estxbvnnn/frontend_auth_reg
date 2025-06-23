@@ -18,11 +18,7 @@ export default function ProductoModal({ show, setShow, userData, handleRefresh, 
       Swal.fire("La cantidad no puede ser mayor a 999.999", "", "error");
       return;
     }
-<<<<<<< HEAD
-    if (dayjs(formData.vencimiento).isBefore(dayjs(), 'day')) {
-=======
     if (dayjs(formData.fechaVencimiento).isBefore(dayjs(), 'day')) {
->>>>>>> ffed50f4faa853e53a0e91c6b7457e078ff561f0
       Swal.fire("La fecha de vencimiento no puede ser anterior a hoy", "", "error");
       return;
     }
@@ -80,23 +76,6 @@ export default function ProductoModal({ show, setShow, userData, handleRefresh, 
                 <tr>
                   <th className="bg-success text-white">Precio</th>
                   <td>
-<<<<<<< HEAD
-                    <input
-                      type="number"
-                      className="form-control"
-                      placeholder="Precio"
-                      value={formData.precio || ""}
-                      min={0}
-                      max={9999999}
-                      step={0.01}
-                      onChange={e => {
-                        let value = e.target.value;
-                        if (value > 9999999) value = 9999999;
-                        setFormData(f => ({ ...f, precio: Number(value) }));
-                      }}
-                      required
-                    />
-=======
                     <div className="input-group">
                       <input
                         type="number"
@@ -122,7 +101,6 @@ export default function ProductoModal({ show, setShow, userData, handleRefresh, 
                       </span>
                     </div>
                     <small className="text-muted">Si el precio es 0, el producto será marcado como <b>Gratis</b>.</small>
->>>>>>> ffed50f4faa853e53a0e91c6b7457e078ff561f0
                   </td>
                 </tr>
                 <tr>
@@ -198,5 +176,5 @@ export default function ProductoModal({ show, setShow, userData, handleRefresh, 
         }
       `}</style>
     </Modal>
-    );
+  );
 }

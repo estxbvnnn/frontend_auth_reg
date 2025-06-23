@@ -55,7 +55,7 @@ export default function EditarPerfil() {
       <div className="mx-auto" style={{ maxWidth: 520 }}>
         <div className="card shadow border-0 p-4 rounded-4">
           <h2 className="text-success fw-bold mb-3 text-center">
-            <i className="bi bi-person-circle me-2"></i>Editar Perfil
+            <i className="bi bi-person-circle me-2"></i>Perfil
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">

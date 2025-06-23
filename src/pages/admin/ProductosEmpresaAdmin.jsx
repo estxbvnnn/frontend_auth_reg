@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import React from "react";
-
-export default function ProductosEmpresaAdmin() {
-  return (
-    <div>
-      <h2>Gestión de productos de empresa (Admin)</h2>
-      {/* Implementa aquí la lógica de administración de productos de empresas */}
-    </div>
-  );
-=======
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getDoc, doc } from "firebase/firestore";
@@ -183,5 +172,4 @@ export default function ProductosEmpresaAdmin() {
             />
         </div>
     );
->>>>>>> ffed50f4faa853e53a0e91c6b7457e078ff561f0
 }
