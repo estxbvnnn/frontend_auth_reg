@@ -142,7 +142,12 @@ export default function ProductoCard({ userData, eliminar, abrirModal, orden, pa
                   `$${producto.precio}`
                 )}
               </p>
-              <p><b>Stock:</b> {producto.cantidad}</p>
+              <p>
+                <b>Stock:</b> {producto.cantidad}
+                {Number(producto.cantidad) === 0 && (
+                  <span className="badge-sin-stock ms-2">Sin stock</span>
+                )}
+              </p>
               <p>
                 <b>Vence:</b> {dayjs(producto.fechaVencimiento).format("DD/MM/YYYY")}
                 {estado === "vencido" && (
@@ -182,6 +187,18 @@ export default function ProductoCard({ userData, eliminar, abrirModal, orden, pa
         </button>
       </div>
       <div className="total-productos">Total productos: {total}</div>
+      <style>{`
+        .badge-sin-stock {
+          background: #ffebee;
+          color: #c62828;
+          border: 1px solid #e57373;
+          font-weight: 600;
+          border-radius: 12px;
+          font-size: 0.95rem;
+          padding: 4px 12px;
+          margin-left: 8px;
+        }
+      `}</style>
     </div>
   );
 }

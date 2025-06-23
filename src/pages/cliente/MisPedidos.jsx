@@ -32,7 +32,7 @@ export default function MisPedidos() {
           <i className="bi bi-list-check me-2"></i>Mis Pedidos
         </h2>
         {pedidos.length === 0 ? (
-          <div className="text-center text-muted py-4">No tienes pedidos aÃºn.</div>
+          <div className="text-center text-muted py-4">No tienes pedidos aún.</div>
         ) : (
           <div className="table-responsive">
             <table className="table table-hover align-middle">
