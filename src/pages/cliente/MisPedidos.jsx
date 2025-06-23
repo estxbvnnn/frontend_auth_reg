@@ -32,7 +32,7 @@ export default function MisPedidos() {
           <i className="bi bi-list-check me-2"></i>Mis Pedidos
         </h2>
         {pedidos.length === 0 ? (
-          <div className="text-center text-muted py-4">No tienes pedidos aún.</div>
+          <div className="text-center text-muted py-4">No tienes pedidos aÃºn.</div>
         ) : (
           <div className="table-responsive">
             <table className="table table-hover align-middle">
@@ -58,7 +58,7 @@ export default function MisPedidos() {
                         {p.estado.charAt(0).toUpperCase() + p.estado.slice(1)}
                       </span>
                     </td>
-                    <td>{new Date(p.fecha.seconds * 1000).toLocaleDateString()}</td>
+                    <td>{p.fecha && p.fecha.seconds ? new Date(p.fecha.seconds * 1000).toLocaleDateString() : ""}</td>
                   </tr>
                 ))}
               </tbody>

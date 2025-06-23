@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../firebase/AuthContext";
-import { getDoc, doc } from "firebase/firestore";
+import { getDoc, doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
-import ProductoCard from "../../components/ProductoCard";
-import ProductoModal from "../../components/ProductoModal";
 import Swal from "sweetalert2";
-import { deleteProducto } from "../../services/productoService";
 import { useNavigate } from "react-router-dom";
+import empresaAvatar from "../../assets/img/frutita.jpg";
+import { regiones, regionesYComunas } from "../../components/regionesComunas";
 
-export default function ProductosEmpresa() {
+export default function PerfilEmpresa() {
     const { userData, loading } = useAuth();
     const [empresa, setEmpresa] = useState(null);
     const [localLoading, setLocalLoading] = useState(true);
     const [error, setError] = useState("");
-    const [busqueda, setBusqueda] = useState("");
-    const [refreshTick, setRefreshTick] = useState(0);
-    const [showModal, setShowModal] = useState(false);
-    const [formData, setFormData] = useState({
+    const [edit, setEdit] = useState(false);
+    const [form, setForm] = useState({
         nombre: "",
-        descripcion: "",
-        precio: 0,
-        cantidad: 1,
-        vencimiento: "",
-        id: null,
+        direccion: "",
+        region: "",
+        comuna: "",
+        rut: "",
+        email: "",
+        telefono: "",
+        contacto: ""
     });
+    const [comunasDisponibles, setComunasDisponibles] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -51,170 +51,275 @@ export default function ProductosEmpresa() {
             });
     }, [userData, loading]);
 
-    if (loading || localLoading) return (
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "60vh" }}>
-            <div className="spinner-border text-success" role="status">
-                <span className="visually-hidden">Cargando productos empresa...</span>
-            </div>
-        </div>
-    );
-    if (error) return <div className="container mt-4"><div className="alert alert-danger">{error}</div></div>;
-    if (!empresa) return <div className="container mt-4"><div className="alert alert-warning">No tienes perfil de empresa registrado.</div></div>;
-
-    const handleRefresh = () => setRefreshTick(t => t + 1);
-
-    const eliminar = async (id) => {
-        try {
-            const confirm = await Swal.fire({
-                title: "¿Eliminar producto?",
-                text: "Esta acción no se puede deshacer.",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Sí, eliminar",
-                cancelButtonText: "Cancelar",
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#3085d6",
-            });
-            if (confirm.isConfirmed) {
-                await deleteProducto(id);
-                handleRefresh();
-                Swal.fire("Eliminado", "El producto ha sido eliminado.", "success");
-            }
-        } catch (e) {
-            console.error(e);
-            Swal.fire("Error al eliminar", "", "error");
-        }
-    };
-
-    const abrirModal = (producto = null) => {
-        if (producto) {
-            setFormData({ ...producto });
+    useEffect(() => {
+        if (form.region) {
+            setComunasDisponibles(regionesYComunas[form.region] || []);
         } else {
-            setFormData({
-                nombre: "",
-                descripcion: "",
-                precio: 0,
-                cantidad: 1,
-                vencimiento: "",
-                id: null,
-            });
+            setComunasDisponibles([]);
         }
-        setShowModal(true);
-    };
+    }, [form.region]);
+
+    if (loading || localLoading) return <div style={{ color: "blue" }}>Cargando perfil empresa...</div>;
+    if (error) return <div className="ecofood-form-container empresa-form-custom"><div className="error">{error}</div></div>;
+    if (!empresa) return <div className="ecofood-form-container empresa-form-custom"><div className="error">No tienes perfil de empresa registrado.</div></div>;
 
     return (
-        <div className="container py-5">
-            <div className="row justify-content-center">
-                <div className="col-lg-10">
-                    <div className="card shadow border-0 rounded-4 p-4">
-                        <div className="d-flex flex-column flex-md-row align-items-center justify-content-between mb-4">
-                            <div>
-                                <h2 className="mb-1 text-success fw-bold">
-                                    <i className="bi bi-box-seam-fill me-2"></i>Gestión de Productos
-                                </h2>
-                                <p className="text-muted mb-0" style={{ fontSize: 16 }}>
-                                    Administra tus productos, agrégalos, edítalos o elimínalos fácilmente.
-                                </p>
-                            </div>
-                            <button
-                                className="btn btn-gradient-green btn-lg mt-3 mt-md-0 shadow-sm d-flex align-items-center gap-2"
-                                style={{
-                                    background: "linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)",
-                                    color: "#fff",
-                                    border: "none",
-                                    borderRadius: "2rem",
-                                    fontWeight: 600,
-                                    fontSize: "1.15rem",
-                                    boxShadow: "0 4px 16px rgba(67,233,123,0.15)",
-                                    padding: "0.75rem 2rem",
-                                    transition: "background 0.2s"
-                                }}
-                                onClick={() => abrirModal()}
-                            >
-                                <i className="bi bi-plus-circle fs-4"></i>
-                                <span>Agregar Producto</span>
-                            </button>
-                        </div>
-                        <div className="row g-3 align-items-center mb-4">
-                            <div className="col-md-8">
-                                <div className="input-group">
-                                    <span className="input-group-text bg-success text-white">
-                                        <i className="bi bi-search"></i>
-                                    </span>
-                                    <input
-                                        className="form-control"
-                                        type="search"
-                                        placeholder="Buscar producto por nombre"
-                                        value={busqueda}
-                                        onChange={(e) => setBusqueda(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-md-4 text-end d-flex justify-content-end gap-2">
-                                <button className="btn btn-outline-success" onClick={handleRefresh}>
-                                    <i className="bi bi-arrow-clockwise"></i> Actualizar
-                                </button>
-                                <button
-                                    className="btn btn-outline-secondary"
-                                    onClick={() => navigate("/home")}
-                                >
-                                    <i className="bi bi-house-door me-1"></i> Volver al inicio
-                                </button>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-12">
-                                <ProductoCard
-                                    key={refreshTick}
-                                    busqueda={busqueda}
-                                    userData={userData}
-                                    eliminar={eliminar}
-                                    abrirModal={abrirModal}
-                                />
-                            </div>
-                        </div>
+        <div
+            className="ecofood-form-container empresa-form-custom shadow-lg p-4 bg-white rounded-4"
+            style={{ maxWidth: 900, margin: "40px auto", border: "1px solid #e0f2f1" }}
+        >
+            <div className="d-flex flex-column flex-md-row align-items-center mb-4 pb-3 border-bottom">
+                <img
+                    src={empresaAvatar}
+                    alt="Logo Empresa"
+                    className="rounded-circle shadow"
+                    style={{
+                        width: 120,
+                        height: 120,
+                        objectFit: "cover",
+                        border: "5px solid #43e97b",
+                        marginRight: 36,
+                        background: "#fff"
+                    }}
+                />
+                <div>
+                    <h2 className="mb-1 titulo-verde" style={{ fontWeight: 800, fontSize: 32 }}>{empresa.nombre}</h2>
+                    <div className="text-muted mb-2" style={{ fontSize: 18 }}>
+                        <i className="bi bi-geo-alt-fill me-2"></i>
+                        {empresa.direccion}, {empresa.comuna}, {empresa.region}
                     </div>
+                    <span className="badge bg-gradient-ecofood px-3 py-2" style={{ fontSize: 16, fontWeight: 500 }}>
+                        <i className="bi bi-building me-1"></i> Empresa EcoFood
+                    </span>
                 </div>
             </div>
-            <ProductoModal
-                id={"productoModal"}
-                show={showModal}
-                setShow={setShowModal}
-                userData={userData}
-                formData={formData}
-                setFormData={setFormData}
-                abrirModal={abrirModal}
-                handleRefresh={handleRefresh}
-            />
+            {!edit ? (
+                <>
+                    <div className="row g-4 mb-3">
+                        <div className="col-md-6">
+                            <div className="mb-2"><b>RUT:</b> <span className="text-dark">{empresa.rut}</span></div>
+                            <div className="mb-2"><b>Email:</b> <span className="text-dark">{empresa.email}</span></div>
+                            <div className="mb-2"><b>Teléfono:</b> <span className="text-dark">{empresa.telefono}</span></div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="mb-2"><b>Contacto:</b> <span className="text-dark">{empresa.contacto}</span></div>
+                            <div className="mb-2"><b>Región:</b> <span className="text-dark">{empresa.region}</span></div>
+                            <div className="mb-2"><b>Comuna:</b> <span className="text-dark">{empresa.comuna}</span></div>
+                        </div>
+                    </div>
+                    <div className="d-flex gap-3 mt-3 justify-content-end">
+                        <button className="btn btn-success empresa-form-btn px-4" onClick={() => {
+                            setForm({
+                                nombre: empresa.nombre,
+                                direccion: empresa.direccion,
+                                region: empresa.region,
+                                comuna: empresa.comuna,
+                                rut: empresa.rut,
+                                email: empresa.email,
+                                telefono: empresa.telefono,
+                                contacto: empresa.contacto
+                            });
+                            setEdit(true);
+                        }}>
+                            <i className="bi bi-pencil-square me-1"></i>Editar Perfil
+                        </button>
+                        <button
+                            className="btn btn-outline-secondary px-4"
+                            onClick={() => navigate("/home")}
+                        >
+                            <i className="bi bi-arrow-left me-1"></i>Volver al inicio
+                        </button>
+                    </div>
+                </>
+            ) : (
+                <form className="row g-3" onSubmit={async (e) => {
+                    e.preventDefault();
+                    await setDoc(doc(db, "empresas", userData.uid), { ...empresa, ...form });
+                    setEmpresa({ ...empresa, ...form });
+                    setEdit(false);
+                    Swal.fire("Perfil actualizado", "", "success");
+                }}>
+                    <div className="col-md-6">
+                        <label className="form-label fw-bold text-success">Nombre</label>
+                        <div className="input-group">
+                            <span className="input-group-text bg-success text-white">
+                                <i className="bi bi-building"></i>
+                            </span>
+                            <input
+                                className="form-control bg-white"
+                                value={form.nombre}
+                                onChange={e => setForm({ ...form, nombre: e.target.value })}
+                                required
+                                minLength={3}
+                                maxLength={60}
+                                placeholder="Nombre de la empresa"
+                            />
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <label className="form-label fw-bold text-success">RUT</label>
+                        <div className="input-group">
+                            <span className="input-group-text bg-success text-white">
+                                <i className="bi bi-credit-card-2-front"></i>
+                            </span>
+                            <input
+                                className="form-control bg-white"
+                                value={form.rut}
+                                onChange={e => setForm({ ...form, rut: e.target.value })}
+                                required
+                                maxLength={10}
+                                placeholder="RUT (Ej: 12345678-9)"
+                            />
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <label className="form-label fw-bold text-success">Dirección</label>
+                        <div className="input-group">
+                            <span className="input-group-text bg-success text-white">
+                                <i className="bi bi-geo-alt"></i>
+                            </span>
+                            <input
+                                className="form-control bg-white"
+                                value={form.direccion}
+                                onChange={e => setForm({ ...form, direccion: e.target.value })}
+                                required
+                                minLength={5}
+                                maxLength={80}
+                                placeholder="Dirección"
+                            />
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <label className="form-label fw-bold text-success">Región</label>
+                        <div className="input-group">
+                            <span className="input-group-text bg-success text-white">
+                                <i className="bi bi-globe"></i>
+                            </span>
+                            <select
+                                className="form-select bg-white"
+                                value={form.region}
+                                onChange={e => setForm({ ...form, region: e.target.value, comuna: "" })}
+                                required
+                            >
+                                <option value="">Seleccione una región</option>
+                                {regiones.map(region => (
+                                    <option key={region} value={region}>{region}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <label className="form-label fw-bold text-success">Comuna</label>
+                        <div className="input-group">
+                            <span className="input-group-text bg-success text-white">
+                                <i className="bi bi-geo"></i>
+                            </span>
+                            <select
+                                className="form-select bg-white"
+                                value={form.comuna}
+                                onChange={e => setForm({ ...form, comuna: e.target.value })}
+                                required
+                                disabled={!form.region}
+                            >
+                                <option value="">Seleccione una comuna</option>
+                                {comunasDisponibles.map(comuna => (
+                                    <option key={comuna} value={comuna}>{comuna}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <label className="form-label fw-bold text-success">Correo electrónico</label>
+                        <div className="input-group">
+                            <span className="input-group-text bg-success text-white">
+                                <i className="bi bi-envelope"></i>
+                            </span>
+                            <input
+                                className="form-control bg-white"
+                                type="email"
+                                value={form.email}
+                                readOnly
+                                disabled
+                                placeholder="Correo electrónico"
+                            />
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <label className="form-label fw-bold text-success">Teléfono</label>
+                        <div className="input-group">
+                            <span className="input-group-text bg-success text-white">
+                                <i className="bi bi-telephone"></i>
+                            </span>
+                            <input
+                                className="form-control bg-white"
+                                value={form.telefono}
+                                onChange={e => setForm({ ...form, telefono: e.target.value })}
+                                required
+                                minLength={8}
+                                maxLength={15}
+                                placeholder="Teléfono"
+                            />
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <label className="form-label fw-bold text-success">Contacto</label>
+                        <div className="input-group">
+                            <span className="input-group-text bg-success text-white">
+                                <i className="bi bi-person"></i>
+                            </span>
+                            <input
+                                className="form-control bg-white"
+                                value={form.contacto}
+                                onChange={e => setForm({ ...form, contacto: e.target.value })}
+                                required
+                                minLength={3}
+                                maxLength={50}
+                                placeholder="Nombre de contacto"
+                            />
+                        </div>
+                    </div>
+                    <div className="d-flex gap-3 mt-4 justify-content-end">
+                        <button className="btn btn-success empresa-form-btn px-4" type="submit">
+                            <i className="bi bi-save me-1"></i>Guardar
+                        </button>
+                        <button className="btn btn-secondary empresa-form-btn px-4" type="button" onClick={() => setEdit(false)}>
+                            Cancelar
+                        </button>
+                        <button
+                            className="btn btn-outline-secondary px-4"
+                            type="button"
+                            onClick={() => navigate("/home")}
+                        >
+                            <i className="bi bi-arrow-left me-1"></i>Volver al inicio
+                        </button>
+                    </div>
+                </form>
+            )}
             <style>{`
-                .card {
-                    background: #f9fdfb;
+                .bg-gradient-ecofood {
+                    background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%) !important;
+                    color: #fff !important;
+                    border: none;
                 }
-                .btn-success, .btn-outline-success, .btn-gradient-green {
+                .empresa-form-custom {
+                    border-radius: 22px;
+                    border: 1px solid #e0f2f1;
+                }
+                .titulo-verde {
+                    color: #43a047;
+                }
+                .empresa-form-btn {
                     border-radius: 30px;
+                    font-weight: 600;
                 }
-                .btn-gradient-green:hover, .btn-gradient-green:focus {
-                    background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
-                    color: #fff;
+                .form-label {
+                    font-size: 1rem;
                 }
                 .input-group-text {
                     border-radius: 30px 0 0 30px;
                 }
-                .form-control, .form-select {
+                .form-control, .form-select, textarea {
                     border-radius: 0 30px 30px 0;
-                }
-                .bi-box-seam-fill {
-                    font-size: 1.5rem;
-                    vertical-align: -0.2em;
-                }
-                @media (max-width: 767px) {
-                    .btn-lg, .btn-gradient-green {
-                        width: 100%;
-                    }
-                    .text-end {
-                        text-align: left !important;
-                        margin-top: 10px;
-                    }
                 }
             `}</style>
         </div>
