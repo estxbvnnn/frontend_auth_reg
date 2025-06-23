@@ -100,6 +100,9 @@ const ProductosPublicos = () => {
                                                     </li>
                                                     <li className="list-group-item px-0 py-1 border-0">
                                                         <b>Cantidad:</b> <span>{producto.cantidad}</span>
+                                                        {Number(producto.cantidad) === 0 && (
+                                                            <span className="badge badge-sin-stock ms-2">Producto sin stock</span>
+                                                        )}
                                                     </li>
                                                     <li className="list-group-item px-0 py-1 border-0">
                                                         <b>Vence:</b> <span>{producto.vencimiento}</span>
@@ -162,6 +165,15 @@ const ProductosPublicos = () => {
                     background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
                     color: #fff;
                     border: none;
+                }
+                .badge-sin-stock {
+                    background: #ffebee;
+                    color: #c62828;
+                    border: 1px solid #e57373;
+                    font-weight: 600;
+                    border-radius: 12px;
+                    font-size: 0.95rem;
+                    padding: 4px 12px;
                 }
                 @media (max-width: 767px) {
                     .empresa-productos-card {
