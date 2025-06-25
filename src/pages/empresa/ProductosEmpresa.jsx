@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { useAuth } from "../../firebase/AuthContext";
 import ProductoCard from "../../components/ProductoCard";
 import ProductoModal from "../../components/ProductoModal";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductosEmpresa() {
   const { userData } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
   const [refreshTick, setRefreshTick] = useState(0);
+  const navigate = useNavigate();
 
   const handleRefresh = () => setRefreshTick(t => t + 1);
 
@@ -62,6 +64,12 @@ export default function ProductosEmpresa() {
         setFormData={setFormData}
         handleRefresh={handleRefresh}
       />
+      <button
+        className="btn btn-outline-success mt-4"
+        onClick={() => navigate("/home")}
+      >
+        <i className="bi bi-house-door me-2"></i>Volver al inicio
+      </button>
     </div>
   );
 }
