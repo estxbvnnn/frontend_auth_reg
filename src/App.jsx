@@ -1,28 +1,23 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// Páginas públicas
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import PasswordReset from './pages/PasswordReset';
 import ProductosPublicos from './pages/ProductosPublicos';
 
-// Componentes de protección de rutas
 import ProtectedByRole from './components/ProtectedByRole';
 
-// Páginas de empresa
-import PerfilEmpresa from './pages/empresa/PerfilEmpresa';
 import ProductosEmpresa from './pages/empresa/ProductosEmpresa';
 import SolicitudesEmpresa from './pages/empresa/SolicitudesEmpresa';
+import PerfilEmpresa from './pages/empresa/PerfilEmpresa'; // <-- Nuevo import
 
-// Páginas de cliente
 import HomeCliente from './pages/cliente/HomeCliente';
 import VerProductos from './pages/cliente/VerProductos';
 import MisPedidos from './pages/cliente/MisPedidos';
 import EditarPerfil from './pages/cliente/EditarPerfil';
 
-// Páginas de administración
 import AdminNav from './pages/admin/AdminNav';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import EmpresasList from './pages/admin/EmpresasList';
@@ -32,7 +27,7 @@ import AdminsList from './pages/admin/AdminList';
 import AdminForm from './pages/admin/AdminForm';
 import AdminRegisterClient from './pages/admin/AdminRegisterClient';
 import AdminRegisterAdmin from './pages/admin/AdminRegisterAdmin';
-import ProductosEmpresaAdmin from './pages/admin/ProductosEmpresaAdmin'; // Solo una vez
+import ProductosEmpresaAdmin from './pages/admin/ProductosEmpresaAdmin'; 
 
 const App = () => {
     return (
@@ -51,7 +46,7 @@ const App = () => {
                     path="/empresa/perfil"
                     element={
                         <ProtectedByRole allowed={["empresa"]}>
-                            <PerfilEmpresa />
+                            <PerfilEmpresa /> {/* Solo datos de la empresa */}
                         </ProtectedByRole>
                     }
                 />
@@ -59,7 +54,7 @@ const App = () => {
                     path="/empresa/productos"
                     element={
                         <ProtectedByRole allowed={["empresa"]}>
-                            <ProductosEmpresa />
+                            <ProductosEmpresa /> {/* Gestión de productos */}
                         </ProtectedByRole>
                     }
                 />
