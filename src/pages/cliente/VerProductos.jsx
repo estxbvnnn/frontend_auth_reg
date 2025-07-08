@@ -3,7 +3,7 @@ import { db } from "../../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
 import Swal from "sweetalert2";
 import { useAuth } from "../../firebase/AuthContext";
-import { solicitarProducto } from "../../services/pedidoService";
+import { solicitarProducto, tieneSolicitudPendiente } from "../../services/pedidoService";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
@@ -18,6 +18,7 @@ const VerProductos = () => {
   const [loading, setLoading] = useState(true);
   const { userData } = useAuth();
   const navigate = useNavigate();
+  const [pendientes, setPendientes] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +31,21 @@ const VerProductos = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (!userData) return;
+    // Para cada producto, verificar si hay solicitud pendiente
+    const checkPendientes = async () => {
+      const result = {};
+      for (const prod of productos) {
+        if (prod.cantidad === 1) {
+          result[prod.id] = await tieneSolicitudPendiente({ productoId: prod.id, clienteId: userData.uid });
+        }
+      }
+      setPendientes(result);
+    };
+    checkPendientes();
+  }, [productos, userData]);
 
   // Filtros y orden
   const productosFiltrados = productos
@@ -77,7 +93,7 @@ const VerProductos = () => {
         });
         Swal.fire("Solicitud enviada", "Tu solicitud está pendiente de aprobación.", "success");
       } catch (e) {
-        Swal.fire("Error", "No se pudo enviar la solicitud.", "error");
+        Swal.fire("Stock insuficiente", e.message || "No se pudo enviar la solicitud.", "error");
       }
     }
   };
@@ -138,6 +154,7 @@ const VerProductos = () => {
           else if (venceEn <= 3) estado = "por-vencer";
           else estado = "disponible";
           const sinStock = prod.cantidad === 0;
+          const pendienteUnico = prod.cantidad === 1 && pendientes[prod.id];
           return (
             <div className="col-12 col-md-6 col-lg-4" key={prod.id}>
               <div className="card producto-publico-card h-100 border-0 shadow-sm">
@@ -182,11 +199,14 @@ const VerProductos = () => {
                     </span>
                     <button
                       className="btn btn-gradient-ecofood btn-lg"
-                      disabled={prod.cantidad === 0 || estado === "vencido"}
+                      disabled={prod.cantidad === 0 || estado === "vencido" || pendienteUnico}
                       onClick={() => solicitarProductoCliente(prod)}
                     >
                       <i className="bi bi-cart-plus me-2"></i>Solicitar
                     </button>
+                    {pendienteUnico && (
+                      <span className="badge bg-warning text-dark">Ya tienes una solicitud pendiente para este producto</span>
+                    )}
                   </div>
                 </div>
               </div>
