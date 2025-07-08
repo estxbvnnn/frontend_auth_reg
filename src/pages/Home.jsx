@@ -12,8 +12,24 @@ const Home = () => {
     const [fullName, setFullName] = useState('');
     const [fade, setFade] = useState(false);
 
+    const mensajesMotivacionales = [
+        "¡Cada alimento salvado es un paso hacia un planeta más verde!",
+        "EcoFood: Donde cada producto cuenta para un mundo mejor.",
+        "¡Juntos reducimos el desperdicio y alimentamos esperanza!",
+        "Transforma excedentes en oportunidades con EcoFood.",
+        "Tu acción hoy alimenta el futuro de todos.",
+        "¡Haz la diferencia, elige comida sustentable!",
+        "Cada producto rescatado es una victoria para el planeta.",
+        "EcoFood conecta empresas y personas para un mundo sin hambre.",
+        "¡Sé parte del cambio, únete a la revolución EcoFood!",
+        "La comida no se bota, se comparte. ¡Súmate a EcoFood!"
+    ];
+
+    const [mensaje, setMensaje] = useState("");
+
     useEffect(() => {
         setFade(true);
+        setMensaje(mensajesMotivacionales[Math.floor(Math.random() * mensajesMotivacionales.length)]);
         const fetchName = async () => {
             if (currentUser) {
                 const docRef = doc(db, 'usuarios', currentUser.uid);
@@ -126,6 +142,9 @@ const Home = () => {
                         Plataforma profesional para la gestión eficiente de excedentes alimentarios.<br />
                         Conectamos empresas y consumidores para reducir el desperdicio y potenciar la economía circular.
                     </p>
+                    <div className="alert alert-success mt-3" style={{ fontSize: 18, fontWeight: 500 }}>
+                        <i className="bi bi-emoji-smile me-2"></i>{mensaje}
+                    </div>
                     {currentUser && (
                         <div className="saludo-animado saludo-ecofood">
                             ¡Hola, {fullName || 'usuario'}!

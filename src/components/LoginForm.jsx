@@ -47,9 +47,9 @@ const LoginForm = () => {
                 if (datos.userType === "admin" || datos.tipo === "admin") {
                     navigate("/home");
                 } else if (datos.userType === "cliente" || datos.tipo === "cliente") {
-                    navigate("/cliente");
+                    navigate("/home");
                 } else if (datos.userType === "empresa" || datos.tipo === "empresa") {
-                    navigate("/empresa/perfil");
+                    navigate("/home");
                 } else {
                     setError("Tipo de usuario no permitido.");
                 }
